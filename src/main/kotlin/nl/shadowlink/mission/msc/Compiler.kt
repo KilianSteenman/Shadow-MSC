@@ -49,6 +49,9 @@ class CompiledScript {
 
     val lines = mutableListOf<ScriptLine>()
 
+    val scriptSizeInBytes: Int
+        get() = lines.sumBy { line -> line.sizeInBytes }
+
     fun addLine(line: ScriptLine) {
         lines.add(line)
     }
