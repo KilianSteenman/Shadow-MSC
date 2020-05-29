@@ -5,7 +5,7 @@ sealed class OpcodeParameter(
 )
 
 data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 4)
-data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 0)
-data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 0)
-data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 0)
-data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 0)
+data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 4)
+data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 7)
+data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 4)
+data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 2)

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="nl.shadowlink.mission.msc.OpcodeParameterTest$StringParamTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2020-05-29T18:25:03" hostname="MacBook-Pro-van-Kilian.local" time="0.004">
+  <properties/>
+  <testcase name="when string is shorter than 7 chars, param size is still 7 bytes()" classname="nl.shadowlink.mission.msc.OpcodeParameterTest$StringParamTest" time="0.003"/>
+  <testcase name="when string length is 7, then param takes 7 bytes()" classname="nl.shadowlink.mission.msc.OpcodeParameterTest$StringParamTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

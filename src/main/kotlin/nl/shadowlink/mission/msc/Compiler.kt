@@ -52,4 +52,8 @@ class CompiledScript {
     fun addLine(line: ScriptLine) {
         lines.add(line)
     }
+
+    fun getAddressForLabel(label: String): Int {
+        return 0
+    }
 }
