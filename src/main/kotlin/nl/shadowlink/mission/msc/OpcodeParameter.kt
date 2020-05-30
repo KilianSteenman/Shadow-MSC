@@ -1,6 +1,7 @@
 package nl.shadowlink.mission.msc
 
 import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
+import java.nio.ByteBuffer
 
 sealed class OpcodeParameter(
     val sizeInBytes: Int
@@ -16,7 +17,13 @@ data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 4) {
 
 data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 4) {
     override fun write(bw: BinaryWriter) {
-        TODO("Not yet implemented")
+        bw.writeByte(0x06) // Type
+        with(ByteBuffer.allocate(4).putFloat(value).array()) {
+            bw.writeByte(get(3))
+            bw.writeByte(get(2))
+            bw.writeByte(get(1))
+            bw.writeByte(get(0))
+        }
     }
 }
 

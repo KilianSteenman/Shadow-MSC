@@ -18,6 +18,7 @@ data class OpcodeLine(
 
     override fun write(bw: BinaryWriter) {
         bw.writeInt16(opcode.toShort(16))
+        params.forEach { it.write(bw) }
     }
 }
 
