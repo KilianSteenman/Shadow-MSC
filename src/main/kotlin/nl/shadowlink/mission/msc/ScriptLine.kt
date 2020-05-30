@@ -5,7 +5,7 @@ import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 sealed class ScriptLine {
     abstract val sizeInBytes: Int
 
-    abstract fun write(bw: BinaryWriter)
+    abstract fun write(bw: BinaryWriter, script: CompiledScript)
 }
 
 data class OpcodeLine(
@@ -16,9 +16,9 @@ data class OpcodeLine(
     override val sizeInBytes: Int
         get() = 2 + params.sumBy { param -> param.sizeInBytes }
 
-    override fun write(bw: BinaryWriter) {
+    override fun write(bw: BinaryWriter, script: CompiledScript) {
         bw.writeInt16(opcode.toShort(16))
-        params.forEach { it.write(bw) }
+        params.forEach { it.write(bw, script) }
     }
 }
 
@@ -27,7 +27,7 @@ data class LabelLine(
     override val sizeInBytes: Int = 0
 ) : ScriptLine() {
 
-    override fun write(bw: BinaryWriter) {
+    override fun write(bw: BinaryWriter, script: CompiledScript) {
 //        TODO("Not yet implemented")
     }
 }

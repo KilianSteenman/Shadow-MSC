@@ -33,7 +33,7 @@ class ScmExporter {
     }
 
     fun writeScript(bw: BinaryWriter, script: CompiledScript) {
-        script.lines.forEach { line -> line.write(bw) }
+        script.lines.forEach { line -> line.write(bw, script) }
     }
 
     private fun BinaryWriter.writeGoTo() {

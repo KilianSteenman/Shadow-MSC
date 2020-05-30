@@ -40,7 +40,7 @@ internal class ScriptLineTest {
                 val opcodeLine = OpcodeLine(opcode = "0001")
 
                 val bw = FakeBinaryWriter()
-                opcodeLine.write(bw)
+                opcodeLine.write(bw, CompiledScript())
 
                 assertThat(bw.writtenBytes).isEqualTo(
                     listOf<Byte>(0x01, 0x0)

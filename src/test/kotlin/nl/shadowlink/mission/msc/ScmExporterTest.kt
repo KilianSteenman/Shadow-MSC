@@ -9,7 +9,7 @@ internal class ScmExporterTest {
     private val exporter = ScmExporter()
 
     @Test
-    fun `simple header is exported`() {
+    fun `header is exported`() {
         val script = CompiledScript().apply {
             addLine(LabelLine("Main"))
             addLine(OpcodeLine("0001"))

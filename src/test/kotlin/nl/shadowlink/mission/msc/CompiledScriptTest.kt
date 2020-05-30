@@ -6,14 +6,31 @@ import org.junit.jupiter.api.Test
 
 internal class CompiledScriptTest {
 
-    @Test
-    fun `label addresses is mapped`() {
-        val compiledScript = CompiledScript()
-        compiledScript.apply {
-            addLine(LabelLine("INIT"))
+    @Nested
+    inner class LabelAddressMappingTest {
+
+        @Test
+        fun `label addresses is mapped`() {
+            val compiledScript = CompiledScript()
+            compiledScript.apply {
+                addLine(LabelLine("INIT"))
+            }
+
+            assertThat(compiledScript.getAddressForLabel("INIT")).isEqualTo(0)
         }
 
-        assertThat(compiledScript.getAddressForLabel("INIT")).isEqualTo(0)
+        @Test
+        fun `multiple label addresses are mapped`() {
+            val compiledScript = CompiledScript()
+            compiledScript.apply {
+                addLine(LabelLine("INIT"))
+                addLine(OpcodeLine("0001"))
+                addLine(LabelLine("MAIN"))
+            }
+
+            assertThat(compiledScript.getAddressForLabel("INIT")).isEqualTo(0)
+            assertThat(compiledScript.getAddressForLabel("MAIN")).isEqualTo(2)
+        }
     }
 
     @Test

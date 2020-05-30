@@ -47,6 +47,9 @@ class Compiler {
 
 open class CompiledScript {
 
+    private var currentAddress = 0
+    private val labelAddressMapping = mutableMapOf<String, Int>()
+
     val headerSize: Int
         get() = 64 + objects.size * 24
 
@@ -63,15 +66,24 @@ open class CompiledScript {
 
     fun addLine(line: ScriptLine) {
         lines.add(line)
+
+        calculateLabelAddress(line)
     }
 
     fun getAddressForLabel(label: String): Int {
-        return 0
+        return labelAddressMapping[label] ?: throw IllegalStateException("Unable to find address for label")
     }
 
     fun addObject(name: String) {
         if (!_objects.contains(name)) {
             _objects.add(name)
+        }
+    }
+
+    private fun calculateLabelAddress(line: ScriptLine) {
+        when (line) {
+            is LabelLine -> labelAddressMapping[line.name] = currentAddress
+            else -> currentAddress += line.sizeInBytes
         }
     }
 }

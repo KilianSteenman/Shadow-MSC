@@ -17,14 +17,13 @@ internal class OpcodeParameterTest {
 
         @Test
         fun `int is written`() {
-            // TODO: Implement this
-//            val bw = FakeBinaryWriter()
-//
-//            IntParam(1).write(bw)
-//
-//            assertThat(bw.writtenBytes).isEqualTo(
-//                listOf<Byte>(0x0, 0x0, 0x0, 0x1)
-//            )
+            val bw = FakeBinaryWriter()
+
+            IntParam(1).write(bw, CompiledScript())
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x1, 0x0, 0x0, 0x0)
+            )
         }
     }
 
@@ -40,7 +39,7 @@ internal class OpcodeParameterTest {
         fun `float param type is 6`() {
             val bw = FakeBinaryWriter()
 
-            FloatParam(1f).write(bw)
+            FloatParam(1f).write(bw, CompiledScript())
 
             assertThat(bw.writtenBytes.first()).isEqualTo(
                 0x06.toByte()
@@ -51,7 +50,7 @@ internal class OpcodeParameterTest {
         fun `float param type is written`() {
             val bw = FakeBinaryWriter()
 
-            FloatParam(3.2f).write(bw)
+            FloatParam(3.2f).write(bw, CompiledScript())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf(0x06, 0xCD.toByte(), 0xCC.toByte(), 0x4C, 0x40)
@@ -76,7 +75,7 @@ internal class OpcodeParameterTest {
         fun `string is written and padded`() {
             val bw = FakeBinaryWriter()
 
-            StringParam("MAIN").write(bw)
+            StringParam("MAIN").write(bw, CompiledScript())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x4D, 0x41, 0x49, 0x4E) + // MAIN
@@ -89,7 +88,7 @@ internal class OpcodeParameterTest {
         fun `string is written without padding`() {
             val bw = FakeBinaryWriter()
 
-            StringParam("INITIAL").write(bw)
+            StringParam("INITIAL").write(bw, CompiledScript())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x49, 0x4E, 0x49, 0x54, 0x49, 0x41, 0x4C) + // INITIAL
@@ -104,6 +103,21 @@ internal class OpcodeParameterTest {
         @Test
         fun `label parameter takes 4 bytes`() {
             assertThat(LabelParam("LABEL").sizeInBytes).isEqualTo(4)
+        }
+
+        @Test
+        fun `address parameter is written`() {
+            val bw = FakeBinaryWriter()
+
+            val script = CompiledScript().apply {
+                addLine(OpcodeLine("0001"))
+                addLine(LabelLine ("Label"))
+            }
+            LabelParam("Label").write(bw, script)
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x2, 0x0, 0x0, 0x0)
+            )
         }
     }
 
