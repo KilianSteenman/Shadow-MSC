@@ -1,6 +1,7 @@
 package nl.shadowlink.mission.msc
 
 import com.google.common.truth.Truth.assertThat
+import nl.shadowlink.mission.msc.fakes.FakeBinaryWriter
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -29,6 +30,22 @@ internal class ScriptLineTest {
             )
 
             assertThat(opcodeLine.sizeInBytes).isEqualTo(10)
+        }
+
+        @Nested
+        inner class WriteTest {
+
+            @Test
+            fun `write opcode, writes the opcode`() {
+                val opcodeLine = OpcodeLine(opcode = "0001")
+
+                val bw = FakeBinaryWriter()
+                opcodeLine.write(bw)
+
+                assertThat(bw.writtenBytes).isEqualTo(
+                    listOf<Byte>(0x01, 0x0)
+                )
+            }
         }
     }
 
