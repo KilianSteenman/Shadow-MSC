@@ -80,6 +80,66 @@ internal class CompiledScriptTest {
         }
     }
 
+    @Nested
+    inner class ScriptGlobalsTest {
+
+        @Test
+        fun `adding a global will add the global to the globals list`() {
+            val compiledScript = CompiledScript().apply {
+                addGlobal("PLAYER_CHAR")
+                addGlobal("PLAYER_ACTOR")
+            }
+
+            assertThat(compiledScript.globals).isEqualTo(listOf("PLAYER_CHAR", "PLAYER_ACTOR"))
+        }
+
+        @Test
+        fun `adding the same global twice will only add it once`() {
+            val compiledScript = CompiledScript().apply {
+                addGlobal("PLAYER_CHAR")
+                addGlobal("PLAYER_CHAR")
+            }
+
+            assertThat(compiledScript.globals).isEqualTo(listOf("PLAYER_CHAR"))
+        }
+
+        @Test
+        fun `address for first global is calculated`() {
+            val compiledScript = CompiledScript().apply {
+                addGlobal("PLAYER_CHAR")
+            }
+
+            assertThat(compiledScript.getAddressForGlobal("PLAYER_CHAR"))
+                .isEqualTo(0)
+        }
+
+        @Test
+        fun `address for global is global index times 4`() {
+            val compiledScript = CompiledScript().apply {
+                addGlobal("PLAYER_CHAR")
+                addGlobal("PLAYER_ACTOR")
+                addGlobal("VEHICLE")
+            }
+
+            assertThat(compiledScript.getAddressForGlobal("PLAYER_ACTOR"))
+                .isEqualTo(4)
+
+            assertThat(compiledScript.getAddressForGlobal("VEHICLE"))
+                .isEqualTo(8)
+        }
+
+        @Test
+        fun `global references in script are added to globals`() {
+            val compiledScript = CompiledScript().apply {
+                addLine(OpcodeLine("0001", params = listOf(GlobalVar("PLAYER_CHAR"), GlobalVar("VEHICLE"))))
+                addLine(OpcodeLine("0002", params = listOf(GlobalVar("PLAYER_ACTOR"), GlobalVar("PLAYER_CHAR"))))
+            }
+
+            assertThat(compiledScript.globals)
+                .isEqualTo(listOf("PLAYER_CHAR", "VEHICLE", "PLAYER_ACTOR"))
+        }
+    }
+
     @Test
     fun `header size is calculated`() {
         val compiledScript = CompiledScript().apply {

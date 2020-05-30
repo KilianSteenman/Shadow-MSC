@@ -56,7 +56,8 @@ open class CompiledScript {
     val missions: List<CompiledScript> = emptyList()
     val lines = mutableListOf<ScriptLine>()
 
-    val globals: List<Int> = emptyList()
+    private val _globals = mutableListOf<String>()
+    val globals: List<String> = _globals
 
     private val _objects = mutableListOf<String>()
     val objects: List<String> = _objects
@@ -66,6 +67,14 @@ open class CompiledScript {
 
     fun addLine(line: ScriptLine) {
         lines.add(line)
+
+        if (line is OpcodeLine) {
+            line.params.forEach { param ->
+                if (param is GlobalVar) {
+                    addGlobal(param.name)
+                }
+            }
+        }
 
         calculateLabelAddress(line)
     }
@@ -85,5 +94,15 @@ open class CompiledScript {
             is LabelLine -> labelAddressMapping[line.name] = currentAddress
             else -> currentAddress += line.sizeInBytes
         }
+    }
+
+    fun addGlobal(name: String) {
+        if (!_globals.contains(name)) {
+            _globals.add(name)
+        }
+    }
+
+    fun getAddressForGlobal(name: String): Int {
+        return _globals.indexOf(name) * 4
     }
 }

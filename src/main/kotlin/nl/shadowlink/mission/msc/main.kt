@@ -3,14 +3,17 @@ package nl.shadowlink.mission.msc
 import nl.shadowlink.mission.msc.binarywriter.FileBinaryWriter
 
 fun main(args: Array<String>) {
-    val script = Compiler().compile(TEST_SCRIPT_1)
+    val script = Compiler().compile(TEST_SCRIPT_2)
     ScmExporter().export(FileBinaryWriter("/Users/kilian/test.scm"), script)
 }
 
 private val TEST_SCRIPT_1 = ":Label\n" +
         "03A4: name_thread 'MAIN'\n" +
         "0001: wait\n" +
-        "04E4: request_collision_at 83.0 -849.8\n"
+        "04E4: request_collision_at 83.0 -849.8\n" +
+        ":Label\n" +
+        "0001: wait\n" +
+        "0002: jump @Label\n"
 
 private val TEST_SCRIPT_2 = "03A4: name_thread 'MAIN'\n" +
         "016A: fade 0 0 ms\n" +
