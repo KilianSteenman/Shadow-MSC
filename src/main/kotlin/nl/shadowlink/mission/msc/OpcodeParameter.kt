@@ -44,6 +44,7 @@ data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 4) {
 
 data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 2) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
+        bw.writeByte(0x2) // Type
         bw.writeInt16(script.getAddressForGlobal(name))
     }
 }

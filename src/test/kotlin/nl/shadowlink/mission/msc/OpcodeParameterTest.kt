@@ -142,7 +142,7 @@ internal class OpcodeParameterTest {
                 GlobalVar("PLAYER_CHAR").write(this, script)
 
                 assertThat(this.writtenBytes).isEqualTo(
-                    listOf<Byte>(0x0, 0x0)
+                    listOf<Byte>(0x02, 0x0, 0x0)
                 )
             }
 
@@ -151,9 +151,21 @@ internal class OpcodeParameterTest {
                 GlobalVar("VEHICLE").write(this, script)
 
                 assertThat(this.writtenBytes).isEqualTo(
-                    listOf<Byte>(0x4, 0x0)
+                    listOf<Byte>(0x02, 0x4, 0x0)
                 )
             }
+        }
+
+        @Test
+        fun `global var param type is written`() {
+            val bw = FakeBinaryWriter()
+            val script = CompiledScript().apply {
+                addGlobal("PLAYER_CHAR")
+            }
+
+            GlobalVar("PLAYER_CHAR").write(bw, script)
+
+            assertThat(bw.writtenBytes.first()).isEqualTo(0x02.toByte())
         }
     }
 }
