@@ -22,7 +22,7 @@ private val TEST_SCRIPT_2 = "03A4: name_thread 'MAIN'\n" +
         "00C0: set_current_time 12 0\n" +
         "04E4: request_collision_at 468.7745 -1298.623\n" +
         "03CB: load_scene 468.7745 -1298.623 11.0712\n" +
-        "0053: \$PLAYER_CHAR = create_player #NULL at 468.7745 -1298.623 11.0712\n" +
+        "0053: create_player 0 at 468.7745 -1298.623 11.0712 \$PLAYER_CHAR\n" +
         "01F5: \$PLAYER_ACTOR = create_emulated_actor_from_player \$PLAYER_CHAR\n" +
         "01B6: set_weather 0\n" +
         "0001: wait 0 ms\n" +

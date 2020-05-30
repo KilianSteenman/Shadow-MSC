@@ -11,6 +11,7 @@ sealed class OpcodeParameter(
 
 data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 4) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
+        bw.writeByte(0x1) // Type
         bw.writeInt32(value)
     }
 }
@@ -43,6 +44,6 @@ data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 4) {
 
 data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 2) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
-        TODO("Not yet implemented")
+        bw.writeInt16(script.getAddressForGlobal(name))
     }
 }

@@ -102,7 +102,7 @@ open class CompiledScript {
         }
     }
 
-    fun getAddressForGlobal(name: String): Int {
-        return _globals.indexOf(name) * 4
+    fun getAddressForGlobal(name: String): Short {
+        return (_globals.indexOf(name) * 4).toShort()
     }
 }

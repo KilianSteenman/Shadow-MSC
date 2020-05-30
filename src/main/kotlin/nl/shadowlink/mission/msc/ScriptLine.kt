@@ -17,7 +17,7 @@ data class OpcodeLine(
         get() = 2 + params.sumBy { param -> param.sizeInBytes }
 
     override fun write(bw: BinaryWriter, script: CompiledScript) {
-        bw.writeInt16(opcode.toShort(16))
+        bw.writeUInt16(opcode.toUShort(16))
         params.forEach { it.write(bw, script) }
     }
 }

@@ -22,7 +22,8 @@ internal class OpcodeParameterTest {
             IntParam(1).write(bw, CompiledScript())
 
             assertThat(bw.writtenBytes).isEqualTo(
-                listOf<Byte>(0x1, 0x0, 0x0, 0x0)
+                listOf<Byte>(0x1) + // Type
+                listOf<Byte>(0x1, 0x0, 0x0, 0x0) // Value
             )
         }
     }
@@ -127,6 +128,32 @@ internal class OpcodeParameterTest {
         @Test
         fun `global var parameter takes 2 bytes`() {
             assertThat(GlobalVar("TEST_PARAM").sizeInBytes).isEqualTo(2)
+        }
+
+        @Test
+        fun `global var parameter is written`() {
+            val script = CompiledScript().apply {
+                addGlobal("PLAYER_CHAR")
+                addGlobal("VEHICLE")
+            }
+
+            // First param should be at address 0
+            with(FakeBinaryWriter()) {
+                GlobalVar("PLAYER_CHAR").write(this, script)
+
+                assertThat(this.writtenBytes).isEqualTo(
+                    listOf<Byte>(0x0, 0x0)
+                )
+            }
+
+            // Second param should be at address 4
+            with(FakeBinaryWriter()) {
+                GlobalVar("VEHICLE").write(this, script)
+
+                assertThat(this.writtenBytes).isEqualTo(
+                    listOf<Byte>(0x4, 0x0)
+                )
+            }
         }
     }
 }

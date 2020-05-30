@@ -18,6 +18,12 @@ class FileBinaryWriter(name: String) : BinaryWriter {
         writeByte(((value.rotateRight(8)) and 0xff).toByte())
     }
 
+    @ExperimentalStdlibApi
+    override fun writeUInt16(value: UShort) {
+        writeByte((value and 0xff.toUShort()).toByte())
+        writeByte(((value.rotateRight(8)) and 0xff.toUShort()).toByte())
+    }
+
     override fun writeInt32(value: Int) {
         with(ByteBuffer.allocate(4).putInt(value).array()) {
             writeByte(get(3))
