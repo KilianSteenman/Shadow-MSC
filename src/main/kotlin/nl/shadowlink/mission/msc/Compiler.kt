@@ -45,9 +45,18 @@ class Compiler {
     }
 }
 
-class CompiledScript {
+open class CompiledScript {
 
+    val headerSize: Int
+        get() = 64 + objects.size * 24
+
+    val missions: List<CompiledScript> = emptyList()
     val lines = mutableListOf<ScriptLine>()
+
+    val globals: List<Int> = emptyList()
+
+    private val _objects = mutableListOf<String>()
+    val objects: List<String> = _objects
 
     val scriptSizeInBytes: Int
         get() = lines.sumBy { line -> line.sizeInBytes }
@@ -58,5 +67,11 @@ class CompiledScript {
 
     fun getAddressForLabel(label: String): Int {
         return 0
+    }
+
+    fun addObject(name: String) {
+        if (!_objects.contains(name)) {
+            _objects.add(name)
+        }
     }
 }

@@ -18,7 +18,7 @@ internal class ScmExporterTest {
         val bw = FakeBinaryWriter()
         exporter.writeHeader(bw, script)
 
-        assertThat(bw.writtenBytes).isEqualTo(
+        assertThat(bw.writtenBytes).containsExactly(
             listOf<Byte>(0x02, 0x0, 0x01)
         )
     }
