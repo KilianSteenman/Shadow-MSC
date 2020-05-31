@@ -12,6 +12,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
+    implementation("com.xenomachina:kotlin-argparser:2.0.7")
+
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
     testImplementation("com.google.truth:truth:1.0.1")
 }
