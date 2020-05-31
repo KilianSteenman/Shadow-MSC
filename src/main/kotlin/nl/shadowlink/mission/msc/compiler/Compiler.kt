@@ -32,7 +32,7 @@ class Compiler {
             intParam != null -> IntParam(intParam)
             floatParam != null -> FloatParam(floatParam)
             resultString.startsWith("$") -> GlobalVar(resultString.substring(1))
-            resultString.endsWith('@') -> LocalVar(resultString.substringBefore('@'))
+            resultString.endsWith('@') -> LocalVar(resultString.substringBefore('@').toInt())
             resultString.startsWith("@") -> LabelParam(resultString.substringAfter('@'))
             resultString.startsWith('\'') -> StringParam(
                 resultString.substring(1, resultString.lastIndex)

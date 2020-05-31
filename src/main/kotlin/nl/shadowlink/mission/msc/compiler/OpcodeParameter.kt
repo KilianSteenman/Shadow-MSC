@@ -50,7 +50,7 @@ data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 3) {
     }
 }
 
-data class LocalVar(val name: String) : OpcodeParameter(sizeInBytes = 0) {
+data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 0) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
         TODO("Not yet implemented")
     }

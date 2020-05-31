@@ -86,7 +86,7 @@ internal class CompilerTest {
                 val compiledScript = compiler.compile("0006: 1@ = 2 // @ = int")
 
                 assertThat((compiledScript.lines.first() as OpcodeLine).params)
-                    .contains(LocalVar("1"))
+                    .contains(LocalVar(1))
             }
 
             @Test
