@@ -31,16 +31,11 @@ class Compiler {
         return when {
             intParam != null -> IntParam(intParam)
             floatParam != null -> FloatParam(floatParam)
-            resultString.startsWith("$") -> GlobalVar(
-                resultString.substring(
-                    1
-                )
-            )
+            resultString.startsWith("$") -> GlobalVar(resultString.substring(1))
+            resultString.endsWith('@') -> LocalVar(resultString.substringBefore('@'))
+            resultString.startsWith("@") -> LabelParam(resultString.substringAfter('@'))
             resultString.startsWith('\'') -> StringParam(
                 resultString.substring(1, resultString.lastIndex)
-            )
-            resultString.startsWith("@") -> LabelParam(
-                resultString.substring(1)
             )
             else -> null
         }

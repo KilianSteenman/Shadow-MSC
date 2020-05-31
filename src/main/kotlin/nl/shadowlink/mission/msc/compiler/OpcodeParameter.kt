@@ -49,3 +49,9 @@ data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 3) {
         bw.writeInt16(script.getAddressForGlobal(name))
     }
 }
+
+data class LocalVar(val name: String) : OpcodeParameter(sizeInBytes = 0) {
+    override fun write(bw: BinaryWriter, script: CompiledScript) {
+        TODO("Not yet implemented")
+    }
+}

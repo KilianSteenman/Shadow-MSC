@@ -82,6 +82,14 @@ internal class CompilerTest {
             }
 
             @Test
+            fun `local var parameter is parsed`() {
+                val compiledScript = compiler.compile("0006: 1@ = 2 // @ = int")
+
+                assertThat((compiledScript.lines.first() as OpcodeLine).params)
+                    .contains(LocalVar("1"))
+            }
+
+            @Test
             fun `label parameter is parsed`() {
                 val compiledScript = compiler.compile("004D: jump_if_false @MAIN_133")
 
