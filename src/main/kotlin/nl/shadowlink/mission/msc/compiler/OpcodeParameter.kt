@@ -50,8 +50,9 @@ data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 3) {
     }
 }
 
-data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 0) {
+data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 3) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
-        TODO("Not yet implemented")
+        bw.writeByte(0x3)
+        bw.writeInt16((index * 4).toShort())
     }
 }

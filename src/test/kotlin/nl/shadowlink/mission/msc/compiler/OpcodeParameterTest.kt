@@ -23,7 +23,7 @@ internal class OpcodeParameterTest {
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
-                listOf<Byte>(0x1, 0x0, 0x0, 0x0) // Value
+                        listOf<Byte>(0x1, 0x0, 0x0, 0x0) // Value
             )
         }
     }
@@ -121,7 +121,7 @@ internal class OpcodeParameterTest {
             // LabelAddress:    66 (0x42)
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
-                listOf<Byte>(0x42, 0x0, 0x0, 0x0)
+                        listOf<Byte>(0x42, 0x0, 0x0, 0x0)
             )
         }
     }
@@ -170,6 +170,45 @@ internal class OpcodeParameterTest {
             GlobalVar("PLAYER_CHAR").write(bw, script)
 
             assertThat(bw.writtenBytes.first()).isEqualTo(0x02.toByte())
+        }
+    }
+
+    @Nested
+    class LocalVarTest {
+
+        @Test
+        fun `local var parameter takes 3 bytes including type byte`() {
+            assertThat(LocalVar(0).sizeInBytes).isEqualTo(3)
+        }
+
+        @Test
+        fun `local var parameter is written`() {
+            // Param with index 0
+            with(FakeBinaryWriter()) {
+                LocalVar(0).write(this, CompiledScript())
+
+                assertThat(this.writtenBytes).isEqualTo(
+                    listOf<Byte>(0x03, 0x0, 0x0)
+                )
+            }
+
+            // Param with index 1
+            with(FakeBinaryWriter()) {
+                LocalVar(1).write(this, CompiledScript())
+
+                assertThat(this.writtenBytes).isEqualTo(
+                    listOf<Byte>(0x03, 0x4, 0x0)
+                )
+            }
+        }
+
+        @Test
+        fun `local var param type is written`() {
+            val bw = FakeBinaryWriter()
+
+            LocalVar(1).write(bw, CompiledScript())
+
+            assertThat(bw.writtenBytes.first()).isEqualTo(0x03.toByte())
         }
     }
 }
