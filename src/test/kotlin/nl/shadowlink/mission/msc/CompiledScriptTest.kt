@@ -39,12 +39,12 @@ internal class CompiledScriptTest {
         compiledScript.apply {
             addLine(LabelLine("INIT"))                                   // Size: 0 (total 0)
             addLine(OpcodeLine("0001"))                                 // Size: 2 (total 2)
-            addLine(OpcodeLine("0002", listOf(IntParam(0))))      // Size: 6 (total 8)
-            addLine(LabelLine("INIT_2"))                                  // Size: 0 (total 8)
-            addLine(OpcodeLine("0001"))                                 // Size: 2 (total 10)
+            addLine(OpcodeLine("0002", listOf(IntParam(0))))      // Size: 7 (total 9)
+            addLine(LabelLine("INIT_2"))                                  // Size: 0 (total 9)
+            addLine(OpcodeLine("0001"))                                 // Size: 2 (total 11)
         }
 
-        assertThat(compiledScript.scriptSizeInBytes).isEqualTo(10)
+        assertThat(compiledScript.scriptSizeInBytes).isEqualTo(11)
     }
 
     @Nested

@@ -9,14 +9,14 @@ sealed class OpcodeParameter(
     abstract fun write(bw: BinaryWriter, script: CompiledScript)
 }
 
-data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 4) {
+data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
         bw.writeByte(0x1) // Type
         bw.writeInt32(value)
     }
 }
 
-data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 4) {
+data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
         bw.writeByte(0x06) // Type
         with(ByteBuffer.allocate(4).putFloat(value).array()) {
@@ -36,14 +36,14 @@ data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
     }
 }
 
-data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 4) {
+data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
         bw.writeByte(0x1) // Type
-        bw.writeInt32(script.getAddressForLabel(label))
+        bw.writeInt32(script.headerSize + script.getAddressForLabel(label))
     }
 }
 
-data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 2) {
+data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 3) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
         bw.writeByte(0x2) // Type
         bw.writeInt16(script.getAddressForGlobal(name))

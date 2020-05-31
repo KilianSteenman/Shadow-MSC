@@ -29,7 +29,7 @@ internal class ScriptLineTest {
                 )
             )
 
-            assertThat(opcodeLine.sizeInBytes).isEqualTo(10)
+            assertThat(opcodeLine.sizeInBytes).isEqualTo(12)
         }
 
         @Nested

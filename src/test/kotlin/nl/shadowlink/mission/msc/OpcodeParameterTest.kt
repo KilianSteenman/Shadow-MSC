@@ -11,8 +11,8 @@ internal class OpcodeParameterTest {
     inner class IntParamTest {
 
         @Test
-        fun `int parameter takes 4 bytes`() {
-            assertThat(IntParam(1).sizeInBytes).isEqualTo(4)
+        fun `int parameter takes 5 bytes including type byte`() {
+            assertThat(IntParam(1).sizeInBytes).isEqualTo(5)
         }
 
         @Test
@@ -32,8 +32,8 @@ internal class OpcodeParameterTest {
     inner class FloatParamTest {
 
         @Test
-        fun `float parameter takes 4 bytes`() {
-            assertThat(FloatParam(1f).sizeInBytes).isEqualTo(4)
+        fun `float parameter takes 5 bytes including type byte`() {
+            assertThat(FloatParam(1f).sizeInBytes).isEqualTo(5)
         }
 
         @Test
@@ -63,12 +63,12 @@ internal class OpcodeParameterTest {
     inner class StringParamTest {
 
         @Test
-        fun `when string length is 7, then param takes 7 bytes`() {
+        fun `when string length is 7, then param takes 8 bytes`() {
             assertThat(StringParam("1234567").sizeInBytes).isEqualTo(8)
         }
 
         @Test
-        fun `when string is shorter than 7 chars, param size is still 7 bytes`() {
+        fun `when string is shorter than 7 chars, then param takes 8 bytes`() {
             assertThat(StringParam("what").sizeInBytes).isEqualTo(8)
         }
 
@@ -86,7 +86,7 @@ internal class OpcodeParameterTest {
         }
 
         @Test
-        fun `string is written without padding`() {
+        fun `when string is 7 bytes, then string is written without padding`() {
             val bw = FakeBinaryWriter()
 
             StringParam("INITIAL").write(bw, CompiledScript())
@@ -102,12 +102,12 @@ internal class OpcodeParameterTest {
     inner class LabelParamTest {
 
         @Test
-        fun `label parameter takes 4 bytes`() {
-            assertThat(LabelParam("LABEL").sizeInBytes).isEqualTo(4)
+        fun `label parameter takes 5 bytes including type byte`() {
+            assertThat(LabelParam("LABEL").sizeInBytes).isEqualTo(5)
         }
 
         @Test
-        fun `address parameter is written`() {
+        fun `address parameter is written at address offset + header size`() {
             val bw = FakeBinaryWriter()
 
             val script = CompiledScript().apply {
@@ -116,9 +116,12 @@ internal class OpcodeParameterTest {
             }
             LabelParam("Label").write(bw, script)
 
+            // Header size:     64
+            // Offset:          2
+            // LabelAddress:    66 (0x42)
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
-                listOf<Byte>(0x2, 0x0, 0x0, 0x0)
+                listOf<Byte>(0x42, 0x0, 0x0, 0x0)
             )
         }
     }
@@ -127,8 +130,8 @@ internal class OpcodeParameterTest {
     inner class GlobalVarParamTest {
 
         @Test
-        fun `global var parameter takes 2 bytes`() {
-            assertThat(GlobalVar("TEST_PARAM").sizeInBytes).isEqualTo(2)
+        fun `global var parameter takes 3 bytes including type byte`() {
+            assertThat(GlobalVar("TEST_PARAM").sizeInBytes).isEqualTo(3)
         }
 
         @Test
