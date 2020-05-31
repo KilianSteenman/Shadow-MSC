@@ -1,7 +1,6 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 import com.google.common.truth.Truth.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -33,7 +32,10 @@ internal class CompilerTest {
             val compiledScript = compiler.compile("00C0: set_current_time 12 0")
 
             assertThat((compiledScript.lines.first() as OpcodeLine).params)
-                .containsExactly(IntParam(12), IntParam(0))
+                .containsExactly(
+                    IntParam(12),
+                    IntParam(0)
+                )
         }
 
         @Nested

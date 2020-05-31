@@ -1,4 +1,4 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 

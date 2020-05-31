@@ -1,6 +1,7 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 import com.google.common.truth.Truth.assertThat
+import nl.shadowlink.mission.msc.compiler.*
 import nl.shadowlink.mission.msc.fakes.FakeBinaryWriter
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -112,7 +113,7 @@ internal class OpcodeParameterTest {
 
             val script = CompiledScript().apply {
                 addLine(OpcodeLine("0001"))
-                addLine(LabelLine ("Label"))
+                addLine(LabelLine("Label"))
             }
             LabelParam("Label").write(bw, script)
 

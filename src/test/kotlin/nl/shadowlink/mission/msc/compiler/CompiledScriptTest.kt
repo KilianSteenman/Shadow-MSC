@@ -1,4 +1,4 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Nested
@@ -131,8 +131,24 @@ internal class CompiledScriptTest {
         @Test
         fun `global references in script are added to globals`() {
             val compiledScript = CompiledScript().apply {
-                addLine(OpcodeLine("0001", params = listOf(GlobalVar("PLAYER_CHAR"), GlobalVar("VEHICLE"))))
-                addLine(OpcodeLine("0002", params = listOf(GlobalVar("PLAYER_ACTOR"), GlobalVar("PLAYER_CHAR"))))
+                addLine(
+                    OpcodeLine(
+                        "0001",
+                        params = listOf(
+                            GlobalVar("PLAYER_CHAR"),
+                            GlobalVar("VEHICLE")
+                        )
+                    )
+                )
+                addLine(
+                    OpcodeLine(
+                        "0002",
+                        params = listOf(
+                            GlobalVar("PLAYER_ACTOR"),
+                            GlobalVar("PLAYER_CHAR")
+                        )
+                    )
+                )
             }
 
             assertThat(compiledScript.globals)

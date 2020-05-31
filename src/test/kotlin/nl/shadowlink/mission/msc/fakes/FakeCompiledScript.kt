@@ -1,6 +1,6 @@
 package nl.shadowlink.mission.msc.fakes
 
-import nl.shadowlink.mission.msc.CompiledScript
+import nl.shadowlink.mission.msc.compiler.CompiledScript
 
 class FakeCompiledScript: CompiledScript() {
 }

@@ -1,4 +1,4 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 import com.google.common.truth.Truth.assertThat
 import nl.shadowlink.mission.msc.fakes.FakeBinaryWriter

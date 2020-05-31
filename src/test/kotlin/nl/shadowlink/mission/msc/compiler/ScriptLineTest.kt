@@ -1,6 +1,7 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 import com.google.common.truth.Truth.assertThat
+import nl.shadowlink.mission.msc.compiler.*
 import nl.shadowlink.mission.msc.fakes.FakeBinaryWriter
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

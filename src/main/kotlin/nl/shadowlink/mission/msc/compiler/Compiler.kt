@@ -1,4 +1,4 @@
-package nl.shadowlink.mission.msc
+package nl.shadowlink.mission.msc.compiler
 
 class Compiler {
 
@@ -31,9 +31,17 @@ class Compiler {
         return when {
             intParam != null -> IntParam(intParam)
             floatParam != null -> FloatParam(floatParam)
-            resultString.startsWith("$") -> GlobalVar(resultString.substring(1))
-            resultString.startsWith('\'') -> StringParam(resultString.substring(1, resultString.lastIndex))
-            resultString.startsWith("@") -> LabelParam(resultString.substring(1))
+            resultString.startsWith("$") -> GlobalVar(
+                resultString.substring(
+                    1
+                )
+            )
+            resultString.startsWith('\'') -> StringParam(
+                resultString.substring(1, resultString.lastIndex)
+            )
+            resultString.startsWith("@") -> LabelParam(
+                resultString.substring(1)
+            )
             else -> null
         }
     }
