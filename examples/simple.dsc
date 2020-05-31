@@ -51,7 +51,7 @@
 038B: load_requested_models
 
 :MAIN_333
-00D6: if
+00D6: if 0
 8248:   not model #CBA available
 004D: jump_if_false @MAIN_359
 0001: wait 0 ms
