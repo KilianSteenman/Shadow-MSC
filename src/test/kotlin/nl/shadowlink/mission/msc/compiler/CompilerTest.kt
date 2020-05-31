@@ -20,6 +20,14 @@ internal class CompilerTest {
         }
 
         @Test
+        fun `comment is ignored when parsing opcode line`() {
+            val line = compiler.compile("0005: \$9 = 304.5 // \$ = float \$COMMENTED_GLOBAL").lines.first()
+
+            val expectedLine = OpcodeLine("0005", listOf(GlobalVar("9"), FloatParam(304.5f)))
+            assertThat(line).isEqualTo(expectedLine)
+        }
+
+        @Test
         fun `opcode is parsed from opcode line`() {
             val compiledScript = compiler.compile("01F0: set_max_wanted_level_to 6")
 

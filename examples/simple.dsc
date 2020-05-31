@@ -9,7 +9,7 @@
 01F5: create_emulated_actor_from_player $PLAYER_CHAR $PLAYER_ACTOR
 0001: wait 0 ms
 01B6: set_weather 0
-00D6: if
+00D6: if 0
 8118:   not actor $PLAYER_ACTOR dead
 004D: jump_if_false @MAIN_133
 0352: set_actor $PLAYER_ACTOR skin_to 'PLAYER'
@@ -18,7 +18,7 @@
 
 :MAIN_133
 016A: fade 1 1000 ms
-00D6: if
+00D6: if 0
 0256:   player $PLAYER_CHAR defined
 004D: jump_if_false @MAIN_704
 04BB: select_interiour 0 // select render area
@@ -82,21 +82,21 @@
 
 :MAIN_508
 0001: wait 0 ms
-00D6: if
+00D6: if 0
 00F9:   player $PLAYER_CHAR stopped 1 87.54 -854.669 10.0 radius 1.0 1.0 2.0
 004D: jump_if_false @MAIN_508
 0211: actor 4@ walk_to 75.0 -854.669
 
 :MAIN_575
 0001: wait 0 ms
-00D6: if
+00D6: if 0
 0102:   actor 4@ stopped_near_point_on_foot 75.0 -854.669 10.0 radius 1.0 1.0 2.0 sphere 1
 004D: jump_if_false @MAIN_575
 0239: actor 4@ run_to 60.0 -854.669
 
 :MAIN_642
 0001: wait 0 ms
-00D6: if
+00D6: if 0
 0102:   actor 4@ stopped_near_point_on_foot 60.0 -854.669 10.0 radius 1.0 1.0 2.0 sphere 1
 004D: jump_if_false @MAIN_642
 0005: $11 = 1.0 // $ = float

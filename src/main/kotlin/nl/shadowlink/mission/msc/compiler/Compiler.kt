@@ -48,7 +48,7 @@ class Compiler {
 
     companion object {
         private val labelLineRegex = ":(.+)".toRegex()
-        private val opcodeLineRegex = "(.{4}):(.+)".toRegex()
+        private val opcodeLineRegex = "(.{4}):([^\\/]+)(?:\\/\\/(.+))?".toRegex()
         private val paramSplitRegex = "(\\S+)".toRegex()
     }
 }
@@ -88,7 +88,7 @@ open class CompiledScript {
     }
 
     fun getAddressForLabel(label: String): Int {
-        return labelAddressMapping[label] ?: throw IllegalStateException("Unable to find address for label $label")
+        return labelAddressMapping[label] ?: throw IllegalStateException("Unable to find address for label [$label]")
     }
 
     fun addObject(name: String) {
