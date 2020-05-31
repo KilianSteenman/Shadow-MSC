@@ -88,7 +88,7 @@ open class CompiledScript {
     }
 
     fun getAddressForLabel(label: String): Int {
-        return labelAddressMapping[label] ?: throw IllegalStateException("Unable to find address for label")
+        return labelAddressMapping[label] ?: throw IllegalStateException("Unable to find address for label $label")
     }
 
     fun addObject(name: String) {
