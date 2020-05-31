@@ -23,11 +23,11 @@ private val TEST_SCRIPT_2 = "03A4: name_thread 'MAIN'\n" +
         "04E4: request_collision_at 468.7745 -1298.623\n" +
         "03CB: load_scene 468.7745 -1298.623 11.0712\n" +
         "0053: create_player 0 at 468.7745 -1298.623 11.0712 \$PLAYER_CHAR\n" +
-        "01F5: \$PLAYER_ACTOR = create_emulated_actor_from_player \$PLAYER_CHAR\n" +
+        "01F5: create_emulated_actor_from_player \$PLAYER_CHAR \$PLAYER_ACTOR\n" +
         "01B6: set_weather 0\n" +
         "0001: wait 0 ms\n" +
         "0180: set_on_mission_flag_to \$ONMISSION\n" +
-        "00D6: if\n" +
+        "00D6: if 0\n" +
         "8118:   not actor \$PLAYER_ACTOR dead\n" +
         "004D: jump_if_false @MAIN_138_TEST\n" +
         "0352: set_actor \$PLAYER_ACTOR skin_to 'PLAYER'\n" +
@@ -36,7 +36,7 @@ private val TEST_SCRIPT_2 = "03A4: name_thread 'MAIN'\n" +
         "\n" +
         ":MAIN_138_TEST\n" +
         "016A: fade 1 1000 ms\n" +
-        "00D6: if\n" +
+        "00D6: if 0\n" +
         "0256:   player \$PLAYER_CHAR defined\n" +
         "004D: jump_if_false @MAIN_174\n" +
         "04BB: select_interiour 0 // select render area\n" +

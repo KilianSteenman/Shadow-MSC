@@ -117,6 +117,7 @@ internal class OpcodeParameterTest {
             LabelParam("Label").write(bw, script)
 
             assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x1) + // Type
                 listOf<Byte>(0x2, 0x0, 0x0, 0x0)
             )
         }
