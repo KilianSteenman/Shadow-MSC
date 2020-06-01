@@ -56,3 +56,9 @@ data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 3) {
         bw.writeInt16((index * 4).toShort())
     }
 }
+
+data class ModelParam(val name: String) : OpcodeParameter(sizeInBytes = 0) {
+    override fun write(bw: BinaryWriter, script: CompiledScript) {
+        TODO("Not yet implemented")
+    }
+}

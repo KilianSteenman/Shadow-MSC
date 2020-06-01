@@ -96,6 +96,14 @@ internal class CompilerTest {
                 assertThat((compiledScript.lines.first() as OpcodeLine).params)
                     .contains(LabelParam("MAIN_133"))
             }
+
+            @Test
+            fun `model parameter is parsed`() {
+                val compiledScript = compiler.compile("0247: request_model #FAGGIO")
+
+                assertThat((compiledScript.lines.first() as OpcodeLine).params)
+                    .contains(ModelParam("FAGGIO"))
+            }
         }
     }
 
