@@ -9,9 +9,8 @@ For my side project [OASE](https://www.youtube.com/playlist?list=PLOxyV5A-M9P38W
 This tool is purely written for my personal needs and will never be as advanced as any of the other tools/compilers available.
 
 ## Known issues
-- No support for threads except the main script
+- No support for threads
 - No support for mission scripts
 - No support for objects
-- No support for local variables
 
 Yep it's pretty useless right now!

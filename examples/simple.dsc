@@ -5,7 +5,7 @@
 00C0: set_current_time 12 0
 04E4: request_collision_at 83.0 -849.8
 03CB: load_scene 83.0 -849.8 9.3
-0053: create_player #NULL at 80.0 -849.8 9.3 $PLAYER_CHAR
+0053: create_player 0 at 80.0 -849.8 9.3 $PLAYER_CHAR
 01F5: create_emulated_actor_from_player $PLAYER_CHAR $PLAYER_ACTOR
 0001: wait 0 ms
 01B6: set_weather 0
