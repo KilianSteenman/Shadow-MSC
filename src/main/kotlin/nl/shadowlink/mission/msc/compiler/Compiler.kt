@@ -66,6 +66,8 @@ open class CompiledScript {
     private val _objects = mutableListOf<String>()
     val objects: List<String> = _objects
 
+    private val modelIds = mutableMapOf<String, Int>()
+
     val scriptSizeInBytes: Int
         get() = lines.sumBy { line -> line.sizeInBytes }
 
@@ -108,5 +110,13 @@ open class CompiledScript {
 
     fun getAddressForGlobal(name: String): Short {
         return (_globals.indexOf(name) * 4).toShort()
+    }
+
+    fun getIdForModel(name: String): Int {
+        return modelIds[name] ?: throw IllegalStateException("ID not found for model [$name]")
+    }
+
+    fun setModelId(name: String, id: Int) {
+        modelIds[name] = id
     }
 }

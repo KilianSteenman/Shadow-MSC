@@ -211,4 +211,37 @@ internal class OpcodeParameterTest {
             assertThat(bw.writtenBytes.first()).isEqualTo(0x03.toByte())
         }
     }
+
+    @Nested
+    class ModelParamTest {
+
+        private val script = CompiledScript().apply {
+            setModelId("FAGGIO", 120)
+        }
+
+        @Test
+        fun `model parameter takes 5 bytes including type byte`() {
+            assertThat(ModelParam("FAGGIO").sizeInBytes).isEqualTo(5)
+        }
+
+        @Test
+        fun `model parameter is written`() {
+            with(FakeBinaryWriter()) {
+                ModelParam("FAGGIO").write(this, script)
+
+                assertThat(this.writtenBytes).isEqualTo(
+                    listOf<Byte>(0x01, 0x78, 0x0, 0x0, 0x0)
+                )
+            }
+        }
+
+        @Test
+        fun `model param type is written`() {
+            val bw = FakeBinaryWriter()
+
+            ModelParam("FAGGIO").write(bw, script)
+
+            assertThat(bw.writtenBytes.first()).isEqualTo(0x01.toByte())
+        }
+    }
 }

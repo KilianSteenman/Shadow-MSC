@@ -57,8 +57,9 @@ data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 3) {
     }
 }
 
-data class ModelParam(val name: String) : OpcodeParameter(sizeInBytes = 0) {
+data class ModelParam(val name: String) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
-        TODO("Not yet implemented")
+        bw.writeByte(0x1)
+        bw.writeInt32(script.getIdForModel(name))
     }
 }
