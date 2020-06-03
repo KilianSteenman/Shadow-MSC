@@ -215,9 +215,7 @@ internal class OpcodeParameterTest {
     @Nested
     class ModelParamTest {
 
-        private val script = CompiledScript().apply {
-            setModelId("FAGGIO", 120)
-        }
+        private val script = CompiledScript()
 
         @Test
         fun `model parameter takes 5 bytes including type byte`() {
@@ -230,7 +228,7 @@ internal class OpcodeParameterTest {
                 ModelParam("FAGGIO").write(this, script)
 
                 assertThat(this.writtenBytes).isEqualTo(
-                    listOf<Byte>(0x01, 0x78, 0x0, 0x0, 0x0)
+                    listOf<Byte>(0x01, 0xC0.toByte(), 0x0, 0x0, 0x0)
                 )
             }
         }
