@@ -1,4 +1,7 @@
 # Shadow-MSC
+============
+ ![CI](https://github.com/KilianSteenman/Shadow-MSC/workflows/CI/badge.svg?branch=master)
+
 Shadow Mission Script Compiler is a super basic (and I mean basic!) mission script compiler for use with GTA: VC.
 
 ## About
