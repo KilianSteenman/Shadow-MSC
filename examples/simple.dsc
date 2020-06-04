@@ -83,7 +83,7 @@
 :MAIN_508
 0001: wait 0 ms
 00D6: if 0
-00F9:   player $PLAYER_CHAR stopped 1 87.54 -854.669 10.0 radius 1.0 1.0 2.0
+00F9:   player $PLAYER_CHAR stopped 87.54 -854.669 10.0 radius 1.0 1.0 2.0 1
 004D: jump_if_false @MAIN_508
 0211: actor 4@ walk_to 75.0 -854.669
 
