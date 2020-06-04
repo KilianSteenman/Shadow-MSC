@@ -10,11 +10,12 @@ class ScmExporter {
     }
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
+        println("Writing header (${script.headerSize} bytes)")
         val secondSegmentOffset = 8 + script.globals.size * 4
         bw.writeGoTo()
         bw.writeInt32(secondSegmentOffset)
         bw.writeByte('m'.toByte()) // TODO: Make this the target game
-        script.globals.forEach { bw.writeInt32(0) }
+        repeat(script.globals.size) { bw.writeInt32(0) }
 
         val thirdSegmentOffset = secondSegmentOffset + 36 + script.objects.size * 24
         bw.writeGoTo()
