@@ -59,7 +59,7 @@ open class CompiledScript {
     private val labelAddressMapping = mutableMapOf<String, Int>()
 
     val headerSize: Int
-        get() = 64 + objects.size * 24
+        get() = 64 + (objects.size * 24) + (globals.size * 4)
 
     val missions: List<CompiledScript> = emptyList()
     val lines = mutableListOf<ScriptLine>()
