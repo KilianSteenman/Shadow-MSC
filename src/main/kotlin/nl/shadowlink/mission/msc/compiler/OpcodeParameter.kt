@@ -53,7 +53,7 @@ data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 3) {
 data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 3) {
     override fun write(bw: BinaryWriter, script: CompiledScript) {
         bw.writeByte(0x3)
-        bw.writeInt16((index * 4).toShort())
+        bw.writeInt16((index * 2).toShort())
     }
 }
 

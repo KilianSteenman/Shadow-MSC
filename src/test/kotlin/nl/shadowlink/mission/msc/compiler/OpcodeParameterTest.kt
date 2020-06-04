@@ -197,7 +197,7 @@ internal class OpcodeParameterTest {
                 LocalVar(1).write(this, CompiledScript())
 
                 assertThat(this.writtenBytes).isEqualTo(
-                    listOf<Byte>(0x03, 0x4, 0x0)
+                    listOf<Byte>(0x03, 0x2, 0x0)
                 )
             }
         }
