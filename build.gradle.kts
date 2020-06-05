@@ -1,9 +1,10 @@
 plugins {
     kotlin("jvm") version "1.3.72"
+    id("maven")
 }
 
-group = "nl.shadowlink.mission"
-version = "0.0.1"
+group = "com.github.kiliansteenman"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
