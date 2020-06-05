@@ -1,2 +1,2 @@
-rootProject.name = "MSC"
+rootProject.name = "Shadow-MSC"
 
