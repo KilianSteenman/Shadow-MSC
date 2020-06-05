@@ -14,6 +14,8 @@ This tool is purely written for my personal needs and will never be as advanced 
 - No support for threads
 - No support for mission scripts
 - No support for objects
+- There is no error handling at all
+- When compiling files are appended instead of overwritten
 
 Yep it's pretty useless right now!
 
