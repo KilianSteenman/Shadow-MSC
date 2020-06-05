@@ -16,3 +16,14 @@ This tool is purely written for my personal needs and will never be as advanced 
 - No support for objects
 
 Yep it's pretty useless right now!
+
+## Examples
+In the examples directory there are a couple of simple example scripts.
+
+*Stripped*
+
+A script which only spawns a player.
+
+*Simple*
+
+Spawns a player, a car, a faggio and an actor. There is a missions sphere located near the actor. When the player enters the sphere, the actor will walk towards another sphere, once the actor reaches the second sphere he will start running towards the last sphere. Once this sphere has been reached, the actor will start spinning in circles.
