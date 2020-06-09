@@ -35,9 +35,7 @@ class Compiler {
             resultString.endsWith('@') -> LocalVar(resultString.substringBefore('@').toInt())
             resultString.startsWith("@") -> LabelParam(resultString.substringAfter('@'))
             resultString.startsWith("#") -> ModelParam(resultString.substringAfter('#'))
-            resultString.startsWith('\'') -> StringParam(
-                resultString.substring(1, resultString.lastIndex)
-            )
+            resultString.startsWith('\'') -> StringParam(resultString.substring(1, resultString.lastIndex))
             else -> null
         }
     }
