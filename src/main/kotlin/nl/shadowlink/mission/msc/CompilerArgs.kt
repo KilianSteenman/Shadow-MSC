@@ -4,11 +4,13 @@ import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 
 class CompilerArgs(parser: ArgParser) {
-    val source by parser.positional(
-        "SOURCE",
-        help = "source filename")
+    val main by parser.storing(
+        "--main",
+        help = "main source file"
+    )
 
-    val destination by parser.positional(
-        "DEST",
-        help = "destination filename").default<String?>(null)
+    val destination by parser.storing(
+        "-o", "--output",
+        help = "destination filename"
+    ).default<String?>(null)
 }
