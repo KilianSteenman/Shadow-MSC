@@ -13,4 +13,9 @@ class CompilerArgs(parser: ArgParser) {
         "-o", "--output",
         help = "destination filename"
     ).default<String?>(null)
+
+    val missions by parser.positionalList(
+        "MISSIONS",
+        help = "Path to missions to include"
+    ).default { emptyList() }
 }

@@ -8,7 +8,9 @@ import java.io.File
 
 fun main(args: Array<String>) {
     ArgParser(args).parseInto(::CompilerArgs).run {
-        val script = Compiler().compile(File(main).readText())
+        val mainSrc = File(main).readText()
+        val missionSrc = missions.map { mission -> File(mission).readText() }
+        val script = Compiler().compile(mainSrc, missionSrc)
         val destination = destination ?: main.replaceAfterLast(".", "scm")
 
         println("Compiling $main to $destination")

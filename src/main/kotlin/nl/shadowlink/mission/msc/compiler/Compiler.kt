@@ -2,7 +2,7 @@ package nl.shadowlink.mission.msc.compiler
 
 class Compiler {
 
-    fun compile(input: String): CompiledScript {
+    fun compile(input: String, missions: List<String> = emptyList()): CompiledScript {
         val compiledScript = CompiledScript()
 
         input.lines().forEach { line ->
