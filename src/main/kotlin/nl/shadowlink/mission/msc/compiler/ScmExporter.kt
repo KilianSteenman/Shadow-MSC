@@ -30,7 +30,7 @@ class ScmExporter {
         bw.writeInt32(fourthSegmentOffset)
         bw.writeByte(0) // Alignment
         bw.writeInt32(script.scriptSizeInBytes) // Main script size
-        bw.writeInt32(0) // TODO: Largest mission size
+        bw.writeInt32(script.largestMissionSizeInBytes)
         bw.writeInt16(script.missions.count().toShort())
         bw.writeInt16(0) // Number of exclusive mission scripts(possibly 1 in III, 2 in VC)
         script.missions.forEach { bw.writeInt32(0) } // TODO: Write mission offsets
