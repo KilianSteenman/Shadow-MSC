@@ -24,6 +24,8 @@ class CompiledScript {
     val scriptSizeInBytes: Int
         get() = lines.sumBy { line -> line.sizeInBytes }
 
+    val largestMissionSizeInBytes: Int = 0
+
     fun addLine(line: ScriptLine) {
         lines.add(line)
 

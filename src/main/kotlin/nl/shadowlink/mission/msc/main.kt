@@ -15,5 +15,12 @@ fun main(args: Array<String>) {
 
         println("Compiling $main to $destination")
         ScmExporter().export(FileBinaryWriter(destination), script)
+        println(
+            "Compilation finished\n" +
+                    "Globals: ${script.globals.size}\n" +
+                    "Missions: ${script.missions.size}\n" +
+                    "Main size: ${script.scriptSizeInBytes} bytes\n" +
+                    "Largest mission size: ${script.largestMissionSizeInBytes} bytes\n"
+        )
     }
 }
