@@ -12,28 +12,34 @@ class ScmExporter {
     fun writeHeader(bw: BinaryWriter, script: Script) {
         println("Writing header (${script.headerSize} bytes)")
         val secondSegmentOffset = 8 + script.globals.size * 4
-        bw.writeGoTo()
-        bw.writeInt32(secondSegmentOffset)
-        bw.writeByte('m'.toByte()) // TODO: Make this the target game
-        repeat(script.globals.size) { bw.writeInt32(0) }
+        with(bw) {
+            writeGoTo()
+            writeInt32(secondSegmentOffset)
+            writeByte('m'.toByte()) // TODO: Make this the target game
+            repeat(script.globals.size) { writeInt32(0) }
+        }
 
         val thirdSegmentOffset = secondSegmentOffset + 36 + script.objects.size * 24
-        bw.writeGoTo()
-        bw.writeInt32(thirdSegmentOffset)
-        bw.writeByte(0) // Alignment
-        bw.writeInt32(script.objects.count() + 1) // There is always one dummy object, so increase count by 1
-        bw.writeNullTerminatedString("Shadow-MSC", 24) // Dummy object name
-        script.objects.forEach { name -> bw.writeNullTerminatedString(name, 24) }
+        with(bw) {
+            writeGoTo()
+            writeInt32(thirdSegmentOffset)
+            writeByte(0) // Alignment
+            writeInt32(script.objects.count() + 1) // There is always one dummy object, so increase count by 1
+            writeNullTerminatedString("Shadow-MSC", 24) // Dummy object name
+            script.objects.forEach { name -> writeNullTerminatedString(name, 24) }
+        }
 
         val fourthSegmentOffset = thirdSegmentOffset + 20 + script.missions.size * 4
-        bw.writeGoTo()
-        bw.writeInt32(fourthSegmentOffset)
-        bw.writeByte(0) // Alignment
-        bw.writeInt32(script.scriptSizeInBytes) // Main script size
-        bw.writeInt32(script.largestMissionSizeInBytes)
-        bw.writeInt16(script.missions.count().toShort())
-        bw.writeInt16(0) // Number of exclusive mission scripts(possibly 1 in III, 2 in VC)
-        script.missions.forEach { bw.writeInt32(0) } // TODO: Write mission offsets
+        with(bw) {
+            writeGoTo()
+            writeInt32(fourthSegmentOffset)
+            writeByte(0) // Alignment
+            writeInt32(script.scriptSizeInBytes) // Main script size
+            writeInt32(script.largestMissionSizeInBytes)
+            writeInt16(script.missions.count().toShort())
+            writeInt16(0) // Number of exclusive mission scripts(possibly 1 in III, 2 in VC)
+            script.missions.forEach { writeInt32(0) } // TODO: Write mission offsets
+        }
     }
 
     fun writeScript(bw: BinaryWriter, script: Script) {
