@@ -14,7 +14,7 @@ internal class ScmExporterTest {
 
         @Test
         fun `header size matches calculated header size`() {
-            val script = CompiledScript().apply {
+            val script = Script().apply {
                 addLine(LabelLine("Main"))
                 addLine(OpcodeLine("0001"))
 
@@ -46,7 +46,7 @@ internal class ScmExporterTest {
 
     @Test
     fun `script is exported`() {
-        val script = CompiledScript().apply {
+        val script = Script().apply {
             addLine(LabelLine("Main"))
             addLine(OpcodeLine("0001"))
         }

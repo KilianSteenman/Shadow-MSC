@@ -4,12 +4,12 @@ import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 
 class ScmExporter {
 
-    fun export(bw: BinaryWriter, script: CompiledScript) {
+    fun export(bw: BinaryWriter, script: Script) {
         writeHeader(bw, script)
         writeScript(bw, script)
     }
 
-    fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
+    fun writeHeader(bw: BinaryWriter, script: Script) {
         println("Writing header (${script.headerSize} bytes)")
         val secondSegmentOffset = 8 + script.globals.size * 4
         bw.writeGoTo()
@@ -36,7 +36,7 @@ class ScmExporter {
         script.missions.forEach { bw.writeInt32(0) } // TODO: Write mission offsets
     }
 
-    fun writeScript(bw: BinaryWriter, script: CompiledScript) {
+    fun writeScript(bw: BinaryWriter, script: Script) {
         script.lines.forEach { line -> line.write(bw, script) }
     }
 

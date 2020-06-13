@@ -19,7 +19,7 @@ internal class OpcodeParameterTest {
         fun `int is written`() {
             val bw = FakeBinaryWriter()
 
-            IntParam(1).write(bw, CompiledScript())
+            IntParam(1).write(bw, Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
@@ -40,7 +40,7 @@ internal class OpcodeParameterTest {
         fun `float param type is 6`() {
             val bw = FakeBinaryWriter()
 
-            FloatParam(1f).write(bw, CompiledScript())
+            FloatParam(1f).write(bw, Script())
 
             assertThat(bw.writtenBytes.first()).isEqualTo(
                 0x06.toByte()
@@ -51,7 +51,7 @@ internal class OpcodeParameterTest {
         fun `float param type is written`() {
             val bw = FakeBinaryWriter()
 
-            FloatParam(3.2f).write(bw, CompiledScript())
+            FloatParam(3.2f).write(bw, Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf(0x06, 0xCD.toByte(), 0xCC.toByte(), 0x4C, 0x40)
@@ -76,7 +76,7 @@ internal class OpcodeParameterTest {
         fun `string is written and padded`() {
             val bw = FakeBinaryWriter()
 
-            StringParam("MAIN").write(bw, CompiledScript())
+            StringParam("MAIN").write(bw, Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x4D, 0x41, 0x49, 0x4E) + // MAIN
@@ -89,7 +89,7 @@ internal class OpcodeParameterTest {
         fun `when string is 7 bytes, then string is written without padding`() {
             val bw = FakeBinaryWriter()
 
-            StringParam("INITIAL").write(bw, CompiledScript())
+            StringParam("INITIAL").write(bw, Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x49, 0x4E, 0x49, 0x54, 0x49, 0x41, 0x4C) + // INITIAL
@@ -110,7 +110,7 @@ internal class OpcodeParameterTest {
         fun `address parameter is written at address offset + header size`() {
             val bw = FakeBinaryWriter()
 
-            val script = CompiledScript().apply {
+            val script = Script().apply {
                 addLine(OpcodeLine("0001"))
                 addLine(LabelLine("Label"))
             }
@@ -136,7 +136,7 @@ internal class OpcodeParameterTest {
 
         @Test
         fun `global var parameter is written`() {
-            val script = CompiledScript().apply {
+            val script = Script().apply {
                 addGlobal("PLAYER_CHAR")
                 addGlobal("VEHICLE")
             }
@@ -163,7 +163,7 @@ internal class OpcodeParameterTest {
         @Test
         fun `global var param type is written`() {
             val bw = FakeBinaryWriter()
-            val script = CompiledScript().apply {
+            val script = Script().apply {
                 addGlobal("PLAYER_CHAR")
             }
 
@@ -185,7 +185,7 @@ internal class OpcodeParameterTest {
         fun `local var parameter is written`() {
             // Param with index 0
             with(FakeBinaryWriter()) {
-                LocalVar(0).write(this, CompiledScript())
+                LocalVar(0).write(this, Script())
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x03, 0x0, 0x0)
@@ -194,7 +194,7 @@ internal class OpcodeParameterTest {
 
             // Param with index 1
             with(FakeBinaryWriter()) {
-                LocalVar(1).write(this, CompiledScript())
+                LocalVar(1).write(this, Script())
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x03, 0x2, 0x0)
@@ -206,7 +206,7 @@ internal class OpcodeParameterTest {
         fun `local var param type is written`() {
             val bw = FakeBinaryWriter()
 
-            LocalVar(1).write(bw, CompiledScript())
+            LocalVar(1).write(bw, Script())
 
             assertThat(bw.writtenBytes.first()).isEqualTo(0x03.toByte())
         }
@@ -215,7 +215,7 @@ internal class OpcodeParameterTest {
     @Nested
     class ModelParamTest {
 
-        private val script = CompiledScript()
+        private val script = Script()
 
         @Test
         fun `model parameter takes 5 bytes including type byte`() {

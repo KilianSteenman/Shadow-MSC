@@ -2,8 +2,8 @@ package nl.shadowlink.mission.msc.compiler
 
 class Compiler {
 
-    fun compile(input: String, missions: List<String> = emptyList()): CompiledScript {
-        val compiledScript = CompiledScript()
+    fun compile(input: String, missions: List<String> = emptyList()): Script {
+        val compiledScript = Script()
 
         input.lines().forEach { line ->
             labelLineRegex.matchEntire(line)?.let { labelResult ->

@@ -2,7 +2,7 @@ package nl.shadowlink.mission.msc.compiler
 
 import nl.shadowlink.mission.msc.gamedata.VcGameData
 
-class CompiledScript {
+class Script {
 
     private val gameData = VcGameData()
 
@@ -12,7 +12,7 @@ class CompiledScript {
     val headerSize: Int
         get() = 64 + (objects.size * 24) + (globals.size * 4)
 
-    val missions: List<CompiledScript> = emptyList()
+    val missions: List<Script> = emptyList()
     val lines = mutableListOf<ScriptLine>()
 
     private val _globals = mutableListOf<String>()

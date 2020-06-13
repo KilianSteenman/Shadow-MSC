@@ -4,14 +4,14 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class CompiledScriptTest {
+internal class ScriptTest {
 
     @Nested
     inner class LabelAddressMappingTest {
 
         @Test
         fun `label addresses is mapped`() {
-            val compiledScript = CompiledScript()
+            val compiledScript = Script()
             compiledScript.apply {
                 addLine(LabelLine("INIT"))
             }
@@ -21,7 +21,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `multiple label addresses are mapped`() {
-            val compiledScript = CompiledScript()
+            val compiledScript = Script()
             compiledScript.apply {
                 addLine(LabelLine("INIT"))
                 addLine(OpcodeLine("0001"))
@@ -35,7 +35,7 @@ internal class CompiledScriptTest {
 
     @Test
     fun `total script size is calculated`() {
-        val compiledScript = CompiledScript()
+        val compiledScript = Script()
         compiledScript.apply {
             addLine(LabelLine("INIT"))                                   // Size: 0 (total 0)
             addLine(OpcodeLine("0001"))                                 // Size: 2 (total 2)
@@ -52,7 +52,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `adding an object will add the object to the object list`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addObject("object1")
             }
 
@@ -61,7 +61,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `adding multiple objects will add the objects to the object list`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addObject("object1")
                 addObject("object2")
             }
@@ -71,7 +71,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `adding an object that was already added doesn't do anything`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addObject("object1")
                 addObject("object1")
             }
@@ -85,7 +85,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `adding a global will add the global to the globals list`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addGlobal("PLAYER_CHAR")
                 addGlobal("PLAYER_ACTOR")
             }
@@ -95,7 +95,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `adding the same global twice will only add it once`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addGlobal("PLAYER_CHAR")
                 addGlobal("PLAYER_CHAR")
             }
@@ -105,7 +105,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `address for first global is calculated`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addGlobal("PLAYER_CHAR")
             }
 
@@ -115,7 +115,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `address for global is global index times 4`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addGlobal("PLAYER_CHAR")
                 addGlobal("PLAYER_ACTOR")
                 addGlobal("VEHICLE")
@@ -130,7 +130,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `global references in script are added to globals`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 addLine(
                     OpcodeLine(
                         "0001",
@@ -161,7 +161,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `header size is calculated with added objects`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 // Add some objects, this should increase the header size by 48
                 addObject("object1")
                 addObject("object2")
@@ -173,7 +173,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `header size is calculated with added globals`() {
-            val compiledScript = CompiledScript().apply {
+            val compiledScript = Script().apply {
                 // Add some globals, this should increase the header size by 8
                 addGlobal("PLAYER_CHAR")
                 addGlobal("PLAYER_ACTOR")
