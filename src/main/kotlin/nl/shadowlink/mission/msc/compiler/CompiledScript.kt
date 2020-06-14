@@ -9,7 +9,16 @@ class CompiledScript {
     val objects: List<String> = _objects
 
     var main: Script? = null
-    val missions: MutableList<Script> = mutableListOf()
+        set(mainScript) {
+            field = mainScript
+            mainScript?.let {
+                addObjectsFromScript(it)
+                addGlobalsFromScript(it)
+            }
+        }
+
+    private val _missions = mutableListOf<Script>()
+    val missions: List<Script> = _missions
 
     val headerSize: Int
         get() = 64 + (objects.size * 24) + (globals.size * 4)
@@ -19,4 +28,26 @@ class CompiledScript {
 
     val largestMissionSizeInBytes: Int
         get() = missions.sortedWith(compareBy(Script::scriptSizeInBytes)).lastOrNull()?.scriptSizeInBytes ?: 0
+
+    fun addMission(mission: Script) {
+        _missions.add(mission)
+        addObjectsFromScript(mission)
+        addGlobalsFromScript(mission)
+    }
+
+    private fun addObjectsFromScript(script: Script) {
+        script.objects.forEach { objectName ->
+            if (!_objects.contains(objectName)) {
+                _objects.add(objectName)
+            }
+        }
+    }
+
+    private fun addGlobalsFromScript(script: Script) {
+        script.globals.forEach { global ->
+            if (!_globals.contains(global)) {
+                _globals.add(global)
+            }
+        }
+    }
 }
