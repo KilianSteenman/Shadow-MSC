@@ -12,7 +12,6 @@ class Script {
     val headerSize: Int
         get() = 64 + (objects.size * 24) + (globals.size * 4)
 
-    val missions: List<Script> = emptyList()
     val lines = mutableListOf<ScriptLine>()
 
     private val _globals = mutableListOf<String>()
@@ -23,8 +22,6 @@ class Script {
 
     val scriptSizeInBytes: Int
         get() = lines.sumBy { line -> line.sizeInBytes }
-
-    val largestMissionSizeInBytes: Int = 0
 
     fun addLine(line: ScriptLine) {
         lines.add(line)
