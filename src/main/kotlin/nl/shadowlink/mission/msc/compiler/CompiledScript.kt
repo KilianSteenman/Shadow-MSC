@@ -8,12 +8,15 @@ class CompiledScript {
     private val _objects = mutableListOf<String>()
     val objects: List<String> = _objects
 
-    val main: Script? = null
-    val missions = mutableListOf<Script>()
+    var main: Script? = null
+    val missions: MutableList<Script> = mutableListOf()
 
     val headerSize: Int
         get() = 64 + (objects.size * 24) + (globals.size * 4)
 
-    val mainSizeInBytes: Int = 0
-    val largestMissionSizeInBytes: Int = 0
+    val mainSizeInBytes: Int
+        get() = main?.scriptSizeInBytes ?: 0
+
+    val largestMissionSizeInBytes: Int
+        get() = missions.sortedWith(compareBy(Script::scriptSizeInBytes)).lastOrNull()?.scriptSizeInBytes ?: 0
 }
