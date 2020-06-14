@@ -2,6 +2,9 @@ package nl.shadowlink.mission.msc.compiler
 
 class CompiledScript {
 
+    val totalSize: Int
+        get() = headerSize + mainSizeInBytes + _missions.sumBy { it.scriptSizeInBytes }
+
     private val _globals = mutableListOf<String>()
     val globals: List<String> = _globals
 

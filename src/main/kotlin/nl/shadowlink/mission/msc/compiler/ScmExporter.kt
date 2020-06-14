@@ -4,12 +4,13 @@ import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 
 class ScmExporter {
 
-    fun export(bw: BinaryWriter, script: Script) {
+    fun export(bw: BinaryWriter, script: CompiledScript) {
         writeHeader(bw, script)
-        writeScript(bw, script)
+
+        script.main?.let { mainScript -> writeScript(bw, mainScript) }
     }
 
-    fun writeHeader(bw: BinaryWriter, script: Script) {
+    fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
         println("Writing header (${script.headerSize} bytes)")
         val secondSegmentOffset = 8 + script.globals.size * 4
         with(bw) {
@@ -34,7 +35,7 @@ class ScmExporter {
             writeGoTo()
             writeInt32(fourthSegmentOffset)
             writeByte(0) // Alignment
-            writeInt32(script.scriptSizeInBytes) // Main script size
+            writeInt32(script.mainSizeInBytes) // Main script size
             writeInt32(script.largestMissionSizeInBytes)
             writeInt16(script.missions.count().toShort())
             writeInt16(0) // Number of exclusive mission scripts(possibly 1 in III, 2 in VC)

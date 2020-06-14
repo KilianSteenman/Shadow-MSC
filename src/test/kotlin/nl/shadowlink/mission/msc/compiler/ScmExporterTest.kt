@@ -22,8 +22,12 @@ internal class ScmExporterTest {
                 addGlobal("PLAYER_ACTOR")
             }
 
+            val compiledScript = CompiledScript().apply {
+                main = script
+            }
+
             val bw = FakeBinaryWriter()
-            exporter.writeHeader(bw, script)
+            exporter.writeHeader(bw, compiledScript)
 
             assertThat(bw.writtenBytes.size).isEqualTo(script.headerSize)
         }

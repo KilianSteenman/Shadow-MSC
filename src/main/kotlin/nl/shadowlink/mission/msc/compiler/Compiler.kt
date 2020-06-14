@@ -2,10 +2,14 @@ package nl.shadowlink.mission.msc.compiler
 
 class Compiler {
 
-    fun compile(mainSource: String, missionSources: List<String> = emptyList()): Script {
+    fun compile(mainSource: String, missionSources: List<String> = emptyList()): CompiledScript {
         val mainScript = compileScript(mainSource)
         val missionScripts = missionSources.map { compileScript(it) }
-        return mainScript
+
+        return CompiledScript().apply {
+            main = mainScript
+            missionScripts.forEach { mission -> addMission(mission) }
+        }
     }
 
     private fun compileScript(scriptSource: String): Script {

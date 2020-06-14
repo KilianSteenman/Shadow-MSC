@@ -15,6 +15,34 @@ internal class CompiledScriptTest {
         assertThat(compiledScript.missions.size).isEqualTo(1)
     }
 
+    @Test
+    fun `total script size is a combination of the header, the main script and all mission scripts combined`() {
+        val mainScript = Script().apply {
+            addLine(OpcodeLine("0001"))
+        }
+
+        val missionScript1 = Script().apply {
+            addLine(OpcodeLine("0001"))
+        }
+
+        val missionScript2 = Script().apply {
+            addLine(OpcodeLine("0001"))
+        }
+
+        val compiledScript = CompiledScript().apply {
+            main = mainScript
+            addMission(missionScript1)
+            addMission(missionScript2)
+        }
+
+        val expectedSize = compiledScript.headerSize +
+                compiledScript.mainSizeInBytes +
+                missionScript1.scriptSizeInBytes +
+                missionScript2.scriptSizeInBytes
+
+        assertThat(compiledScript.totalSize).isEqualTo(expectedSize)
+    }
+
     @Nested
     inner class MainScriptSizeTest {
 
