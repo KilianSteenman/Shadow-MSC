@@ -2,10 +2,16 @@ package nl.shadowlink.mission.msc.compiler
 
 class Compiler {
 
-    fun compile(input: String, missions: List<String> = emptyList()): Script {
+    fun compile(mainSource: String, missionSources: List<String> = emptyList()): Script {
+        val mainScript = compileScript(mainSource)
+        val missionScripts = missionSources.map { compileScript(it) }
+        return mainScript
+    }
+
+    private fun compileScript(scriptSource: String): Script {
         val compiledScript = Script()
 
-        input.lines().forEach { line ->
+        scriptSource.lines().forEach { line ->
             labelLineRegex.matchEntire(line)?.let { labelResult ->
                 val (labelName) = labelResult.destructured
                 compiledScript.addLine(LabelLine(labelName))
