@@ -53,4 +53,8 @@ class CompiledScript {
             }
         }
     }
+
+    fun getOffsetForMission(index: Int): Int {
+        return headerSize + mainSizeInBytes + missions.subList(0, index).sumBy { it.scriptSizeInBytes }
+    }
 }

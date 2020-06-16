@@ -8,6 +8,7 @@ class ScmExporter {
         writeHeader(bw, script)
 
         script.main?.let { mainScript -> writeScript(bw, mainScript) }
+        script.missions.forEach { mission -> writeScript(bw, mission) }
     }
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
@@ -39,7 +40,7 @@ class ScmExporter {
             writeInt32(script.largestMissionSizeInBytes)
             writeInt16(script.missions.count().toShort())
             writeInt16(0) // Number of exclusive mission scripts(possibly 1 in III, 2 in VC)
-            script.missions.forEach { writeInt32(0) } // TODO: Write mission offsets
+            script.missions.forEachIndexed { index, _ -> writeInt32(script.getOffsetForMission(index)) }
         }
     }
 

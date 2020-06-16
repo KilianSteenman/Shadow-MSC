@@ -256,4 +256,38 @@ internal class CompiledScriptTest {
             assertThat(compiledScript.headerSize).isEqualTo(72)
         }
     }
+
+    @Nested
+    inner class MissionOffsetTest {
+
+        @Test
+        fun `first mission starts after the main script`() {
+            val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
+            val mission = Script().apply { addLine(OpcodeLine("0001")) }
+
+            val compiledScript = CompiledScript().apply {
+                main = mainScript
+                addMission(mission)
+            }
+
+            val expectedOffset = compiledScript.headerSize + mainScript.scriptSizeInBytes
+            assertThat(compiledScript.getOffsetForMission(0)).isEqualTo(expectedOffset)
+        }
+
+        @Test
+        fun `second missions offset is after the first mission`() {
+            val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
+            val mission1 = Script().apply { addLine(OpcodeLine("0001")) }
+            val mission2 = Script().apply { addLine(OpcodeLine("0001")) }
+
+            val compiledScript = CompiledScript().apply {
+                main = mainScript
+                addMission(mission1)
+                addMission(mission2)
+            }
+
+            val expectedOffset = compiledScript.headerSize + mainScript.scriptSizeInBytes + mission1.scriptSizeInBytes
+            assertThat(compiledScript.getOffsetForMission(1)).isEqualTo(expectedOffset)
+        }
+    }
 }
