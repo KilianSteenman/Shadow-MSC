@@ -4,11 +4,11 @@ import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 
 class ScmExporter {
 
-    fun export(bw: BinaryWriter, script: CompiledScript) {
-        writeHeader(bw, script)
+    fun export(bw: BinaryWriter, compiledScript: CompiledScript) {
+        writeHeader(bw, compiledScript)
 
-        script.main?.let { mainScript -> writeScript(bw, mainScript) }
-        script.missions.forEach { mission -> writeScript(bw, mission) }
+        compiledScript.main?.let { mainScript -> writeScript(bw, compiledScript, mainScript) }
+        compiledScript.missions.forEach { mission -> writeScript(bw, compiledScript, mission) }
     }
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
@@ -44,8 +44,8 @@ class ScmExporter {
         }
     }
 
-    fun writeScript(bw: BinaryWriter, script: Script) {
-        script.lines.forEach { line -> line.write(bw, script) }
+    fun writeScript(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+        script.lines.forEach { line -> line.write(bw, compiledScript, script) }
     }
 
     private fun BinaryWriter.writeGoTo() {

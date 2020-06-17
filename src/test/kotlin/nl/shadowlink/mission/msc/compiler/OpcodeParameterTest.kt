@@ -19,7 +19,7 @@ internal class OpcodeParameterTest {
         fun `int is written`() {
             val bw = FakeBinaryWriter()
 
-            IntParam(1).write(bw, Script())
+            IntParam(1).write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
@@ -40,7 +40,7 @@ internal class OpcodeParameterTest {
         fun `float param type is 6`() {
             val bw = FakeBinaryWriter()
 
-            FloatParam(1f).write(bw, Script())
+            FloatParam(1f).write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes.first()).isEqualTo(
                 0x06.toByte()
@@ -51,7 +51,7 @@ internal class OpcodeParameterTest {
         fun `float param type is written`() {
             val bw = FakeBinaryWriter()
 
-            FloatParam(3.2f).write(bw, Script())
+            FloatParam(3.2f).write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf(0x06, 0xCD.toByte(), 0xCC.toByte(), 0x4C, 0x40)
@@ -76,7 +76,7 @@ internal class OpcodeParameterTest {
         fun `string is written and padded`() {
             val bw = FakeBinaryWriter()
 
-            StringParam("MAIN").write(bw, Script())
+            StringParam("MAIN").write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x4D, 0x41, 0x49, 0x4E) + // MAIN
@@ -89,7 +89,7 @@ internal class OpcodeParameterTest {
         fun `when string is 7 bytes, then string is written without padding`() {
             val bw = FakeBinaryWriter()
 
-            StringParam("INITIAL").write(bw, Script())
+            StringParam("INITIAL").write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x49, 0x4E, 0x49, 0x54, 0x49, 0x41, 0x4C) + // INITIAL
@@ -107,14 +107,31 @@ internal class OpcodeParameterTest {
         }
 
         @Test
-        fun `label parameter is written at negated address offset`() {
+        fun `when script is the main script, then label parameter is written at file offset`() {
+            val bw = FakeBinaryWriter()
+
+            val script = Script().apply {
+                isMainScript = true
+                addLine(OpcodeLine("0001"))
+                addLine(LabelLine("Label"))
+            }
+            LabelParam("Label").write(bw, CompiledScript(), script)
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x1) + // Type
+                        listOf<Byte>(0xFE.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
+            )
+        }
+
+        @Test
+        fun `when script is not the main script, then label parameter is written at negated address offset`() {
             val bw = FakeBinaryWriter()
 
             val script = Script().apply {
                 addLine(OpcodeLine("0001"))
                 addLine(LabelLine("Label"))
             }
-            LabelParam("Label").write(bw, script)
+            LabelParam("Label").write(bw, CompiledScript(), script)
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
@@ -140,7 +157,7 @@ internal class OpcodeParameterTest {
 
             // First param should be at address 0
             with(FakeBinaryWriter()) {
-                GlobalVar("PLAYER_CHAR").write(this, script)
+                GlobalVar("PLAYER_CHAR").write(this, CompiledScript(), script)
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x02, 0x0, 0x0)
@@ -149,7 +166,7 @@ internal class OpcodeParameterTest {
 
             // Second param should be at address 4
             with(FakeBinaryWriter()) {
-                GlobalVar("VEHICLE").write(this, script)
+                GlobalVar("VEHICLE").write(this, CompiledScript(), script)
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x02, 0x4, 0x0)
@@ -164,14 +181,14 @@ internal class OpcodeParameterTest {
                 addGlobal("PLAYER_CHAR")
             }
 
-            GlobalVar("PLAYER_CHAR").write(bw, script)
+            GlobalVar("PLAYER_CHAR").write(bw, CompiledScript(), script)
 
             assertThat(bw.writtenBytes.first()).isEqualTo(0x02.toByte())
         }
     }
 
     @Nested
-    class LocalVarTest {
+    inner class LocalVarTest {
 
         @Test
         fun `local var parameter takes 3 bytes including type byte`() {
@@ -182,7 +199,7 @@ internal class OpcodeParameterTest {
         fun `local var parameter is written`() {
             // Param with index 0
             with(FakeBinaryWriter()) {
-                LocalVar(0).write(this, Script())
+                LocalVar(0).write(this, CompiledScript(), Script())
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x03, 0x0, 0x0)
@@ -191,7 +208,7 @@ internal class OpcodeParameterTest {
 
             // Param with index 1
             with(FakeBinaryWriter()) {
-                LocalVar(1).write(this, Script())
+                LocalVar(1).write(this, CompiledScript(), Script())
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x03, 0x2, 0x0)
@@ -203,14 +220,14 @@ internal class OpcodeParameterTest {
         fun `local var param type is written`() {
             val bw = FakeBinaryWriter()
 
-            LocalVar(1).write(bw, Script())
+            LocalVar(1).write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes.first()).isEqualTo(0x03.toByte())
         }
     }
 
     @Nested
-    class ModelParamTest {
+    inner class ModelParamTest {
 
         private val script = Script()
 
@@ -222,7 +239,7 @@ internal class OpcodeParameterTest {
         @Test
         fun `model parameter is written`() {
             with(FakeBinaryWriter()) {
-                ModelParam("FAGGIO").write(this, script)
+                ModelParam("FAGGIO").write(this, CompiledScript(), script)
 
                 assertThat(this.writtenBytes).isEqualTo(
                     listOf<Byte>(0x01, 0xC0.toByte(), 0x0, 0x0, 0x0)
@@ -234,7 +251,7 @@ internal class OpcodeParameterTest {
         fun `model param type is written`() {
             val bw = FakeBinaryWriter()
 
-            ModelParam("FAGGIO").write(bw, script)
+            ModelParam("FAGGIO").write(bw, CompiledScript(), script)
 
             assertThat(bw.writtenBytes.first()).isEqualTo(0x01.toByte())
         }
