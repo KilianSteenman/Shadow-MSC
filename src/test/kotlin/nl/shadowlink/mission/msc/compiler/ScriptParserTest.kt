@@ -74,6 +74,14 @@ internal class ScriptParserTest {
             }
 
             @Test
+            fun `gxt entry parameter is parsed as string parameter`() {
+                val compiledScript = parser.parse("01E3: text_1number_styled \"M_PASS\"  200  5000 ms  1")
+
+                assertThat((compiledScript.lines.first() as OpcodeLine).params)
+                    .contains(StringParam("M_PASS"))
+            }
+
+            @Test
             fun `global var parameter is parsed`() {
                 val compiledScript = parser.parse("0053: \$PLAYER_CHAR = create_player #NULL at 80.0 -849.8 9.3")
 

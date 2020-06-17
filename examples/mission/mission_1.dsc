@@ -32,7 +32,7 @@
 
 :PLAYER_IN_VEHICLE
 0394: play_music  1
-01E3: text_1number_styled "M_PASS"  200  5000 ms  1  ;; MISSION PASSED! $~1~
+01E3: text_1number_styled "M_PASS"  200  5000 ms  1
 0110: clear_player $PLAYER_CHAR wanted_level
 0109: player $PLAYER_CHAR money +=  200
 00D8: mission_cleanup
