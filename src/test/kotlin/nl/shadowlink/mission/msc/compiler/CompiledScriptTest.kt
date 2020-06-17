@@ -255,6 +255,20 @@ internal class CompiledScriptTest {
             // Header Size = 64 (default header size) + 8 (globals) = 72
             assertThat(compiledScript.headerSize).isEqualTo(72)
         }
+
+        @Test
+        fun `header size is calculated with added missions`() {
+            val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
+            val missionScript = Script().apply { addLine(OpcodeLine("0001")) }
+
+            val compiledScript = CompiledScript().apply {
+                main = mainScript
+                addMission(missionScript)
+            }
+
+            // Header Size = 64 (default header size) + 4 (1 mission) = 68
+            assertThat(compiledScript.headerSize).isEqualTo(68)
+        }
     }
 
     @Nested

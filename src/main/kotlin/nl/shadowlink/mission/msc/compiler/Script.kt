@@ -9,9 +9,6 @@ class Script {
     private var currentAddress = 0
     private val labelAddressMapping = mutableMapOf<String, Int>()
 
-    val headerSize: Int
-        get() = 64 + (objects.size * 24) + (globals.size * 4)
-
     val lines = mutableListOf<ScriptLine>()
 
     private val _globals = mutableListOf<String>()

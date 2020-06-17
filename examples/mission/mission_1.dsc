@@ -1,4 +1,4 @@
-03A4: name_thread 'MISSION_1'
+03A4: name_thread 'MISS_1'
 016A: fade 0 0 ms
 01B4: set_player $PLAYER_CHAR can_move 0
 00C0: set_current_time 2 0

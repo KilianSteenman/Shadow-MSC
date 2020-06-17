@@ -24,7 +24,7 @@ class CompiledScript {
     val missions: List<Script> = _missions
 
     val headerSize: Int
-        get() = 64 + (objects.size * 24) + (globals.size * 4)
+        get() = 64 + (objects.size * 24) + (globals.size * 4) + (missions.size * 4)
 
     val mainSizeInBytes: Int
         get() = main?.scriptSizeInBytes ?: 0
