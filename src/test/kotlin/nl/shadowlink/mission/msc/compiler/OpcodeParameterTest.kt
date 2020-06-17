@@ -107,7 +107,7 @@ internal class OpcodeParameterTest {
         }
 
         @Test
-        fun `when script is the main script, then label parameter is written at file offset`() {
+        fun `when script is the main script, then label parameter is written as absolute file offset`() {
             val bw = FakeBinaryWriter()
 
             val script = Script().apply {
@@ -119,12 +119,12 @@ internal class OpcodeParameterTest {
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
-                        listOf<Byte>(0xFE.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
+                        listOf<Byte>(0x42, 0x0, 0x0, 0x0)
             )
         }
 
         @Test
-        fun `when script is not the main script, then label parameter is written at negated address offset`() {
+        fun `when script is not the main script, then label parameter is written as relative script offset`() {
             val bw = FakeBinaryWriter()
 
             val script = Script().apply {
