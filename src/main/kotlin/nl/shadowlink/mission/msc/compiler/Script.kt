@@ -20,6 +20,8 @@ class Script {
     val scriptSizeInBytes: Int
         get() = lines.sumBy { line -> line.sizeInBytes }
 
+    var isMainScript = false
+
     fun addLine(line: ScriptLine) {
         lines.add(line)
 

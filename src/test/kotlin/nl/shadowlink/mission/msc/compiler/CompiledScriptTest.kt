@@ -304,4 +304,30 @@ internal class CompiledScriptTest {
             assertThat(compiledScript.getOffsetForMission(1)).isEqualTo(expectedOffset)
         }
     }
+
+    @Nested
+    inner class MainScriptTest {
+
+        @Test
+        fun `setting a script as main script will mark it as main`() {
+            val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
+
+            val compiledScript = CompiledScript().apply {
+                main = mainScript
+            }
+
+            assertThat(compiledScript.main?.isMainScript).isTrue()
+        }
+
+        @Test
+        fun `adding a script as mission, will not mark it as main`() {
+            val missionScript = Script().apply { addLine(OpcodeLine("0001")) }
+
+            val compiledScript = CompiledScript().apply {
+                addMission(missionScript)
+            }
+
+            assertThat(compiledScript.missions.first().isMainScript).isFalse()
+        }
+    }
 }

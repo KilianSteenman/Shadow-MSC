@@ -17,6 +17,7 @@ class CompiledScript {
             mainScript?.let {
                 addObjectsFromScript(it)
                 addGlobalsFromScript(it)
+                it.isMainScript = true
             }
         }
 

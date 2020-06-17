@@ -107,7 +107,7 @@ internal class OpcodeParameterTest {
         }
 
         @Test
-        fun `address parameter is written at address offset + header size`() {
+        fun `label parameter is written at negated address offset`() {
             val bw = FakeBinaryWriter()
 
             val script = Script().apply {
@@ -116,12 +116,9 @@ internal class OpcodeParameterTest {
             }
             LabelParam("Label").write(bw, script)
 
-            // Header size:     64
-            // Offset:          2
-            // LabelAddress:    66 (0x42)
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
-                        listOf<Byte>(0x42, 0x0, 0x0, 0x0)
+                        listOf<Byte>(0xFE.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
             )
         }
     }
