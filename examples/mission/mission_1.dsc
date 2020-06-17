@@ -36,4 +36,4 @@
 0110: clear_player $PLAYER_CHAR wanted_level
 0109: player $PLAYER_CHAR money +=  200
 00D8: mission_cleanup
-0051: return
+004E: end_thread
