@@ -19,11 +19,71 @@ internal class OpcodeParameterTest {
         fun `int is written`() {
             val bw = FakeBinaryWriter()
 
-            IntParam(1).write(bw, CompiledScript(), Script())
+            IntParam(32768).write(bw, CompiledScript(), Script())
 
             assertThat(bw.writtenBytes).isEqualTo(
                 listOf<Byte>(0x1) + // Type
-                        listOf<Byte>(0x1, 0x0, 0x0, 0x0) // Value
+                        listOf<Byte>(0x0, 0x80.toByte(), 0x0, 0x0) // Value
+            )
+        }
+
+        @Test
+        fun `when int param fits into a single byte, param is written as byte`() {
+            val bw = FakeBinaryWriter()
+
+            IntParam(0).write(bw, CompiledScript(), Script())
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x4) + // Type
+                        listOf<Byte>(0x0) // Value
+            )
+        }
+
+        @Test
+        fun `-128 is the lowest number that is written as single byte`() {
+            val bw = FakeBinaryWriter()
+
+            IntParam(-128).write(bw, CompiledScript(), Script())
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x4) + // Type
+                        listOf<Byte>(0x80.toByte()) // Value
+            )
+        }
+
+        @Test
+        fun `127 is the highest number that is written as single byte`() {
+            val bw = FakeBinaryWriter()
+
+            IntParam(127).write(bw, CompiledScript(), Script())
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x4) + // Type
+                        listOf<Byte>(0x7F.toByte()) // Value
+            )
+        }
+
+        @Test
+        fun `-32768 is the lowest number that is written as Int16`() {
+            val bw = FakeBinaryWriter()
+
+            IntParam(-32768).write(bw, CompiledScript(), Script())
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x5) + // Type
+                        listOf<Byte>(0x0, 0x80.toByte()) // Value
+            )
+        }
+
+        @Test
+        fun `32767 is the highest number that is written as Int16`() {
+            val bw = FakeBinaryWriter()
+
+            IntParam(32767).write(bw, CompiledScript(), Script())
+
+            assertThat(bw.writtenBytes).isEqualTo(
+                listOf<Byte>(0x5) + // Type
+                        listOf<Byte>(0xFF.toByte(), 0x7F.toByte()) // Value
             )
         }
     }

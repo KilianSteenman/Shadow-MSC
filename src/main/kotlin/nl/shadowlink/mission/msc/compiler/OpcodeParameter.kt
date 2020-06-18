@@ -11,8 +11,34 @@ sealed class OpcodeParameter(
 
 data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
-        bw.writeByte(0x1) // Type
-        bw.writeInt32(value)
+        when {
+            value.fitsIntoSignedByte() -> bw.writeByteParam(value.toByte())
+            value.fitsIntoInt16() -> bw.writeInt16Param(value.toShort())
+            else -> bw.writeInt32Param(value)
+        }
+    }
+
+    private fun Int.fitsIntoSignedByte(): Boolean {
+        return this >= -128 && this <= 127
+    }
+
+    private fun Int.fitsIntoInt16(): Boolean {
+        return this >= -32768 && this <= 32767
+    }
+
+    private fun BinaryWriter.writeByteParam(value: Byte) {
+        writeByte(0x4) // Type
+        writeByte(value)
+    }
+
+    private fun BinaryWriter.writeInt16Param(value: Short) {
+        writeByte(0x5) // Type
+        writeInt16(value)
+    }
+
+    private fun BinaryWriter.writeInt32Param(value: Int) {
+        writeByte(0x1) // Type
+        writeInt32(value)
     }
 }
 
@@ -40,7 +66,7 @@ data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
         bw.writeByte(0x1) // Type
 
-        val address = if(script.isMainScript) {
+        val address = if (script.isMainScript) {
             compiledScript.headerSize + script.getAddressForLabel(label)
         } else {
             script.getAddressForLabel(label) * -1
