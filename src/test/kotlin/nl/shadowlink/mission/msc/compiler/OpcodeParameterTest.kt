@@ -11,8 +11,18 @@ internal class OpcodeParameterTest {
     inner class IntParamTest {
 
         @Test
-        fun `int parameter takes 5 bytes including type byte`() {
-            assertThat(IntParam(1).sizeInBytes).isEqualTo(5)
+        fun `when int fits into a single byte, then size is 2`() {
+            assertThat(IntParam(1).sizeInBytes).isEqualTo(2)
+        }
+
+        @Test
+        fun `when int fits into an Int16, then size is 3`() {
+            assertThat(IntParam(32767).sizeInBytes).isEqualTo(3)
+        }
+
+        @Test
+        fun `when int fits into an Int32, then size is 5`() {
+            assertThat(IntParam(32768).sizeInBytes).isEqualTo(5)
         }
 
         @Test

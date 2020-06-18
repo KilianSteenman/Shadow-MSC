@@ -4,12 +4,20 @@ import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 import java.nio.ByteBuffer
 
 sealed class OpcodeParameter(
-    val sizeInBytes: Int
+    open val sizeInBytes: Int
 ) {
     abstract fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script)
 }
 
-data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 5) {
+data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 0) {
+
+    override val sizeInBytes: Int
+        get() = when {
+            value.fitsIntoSignedByte() -> 2
+            value.fitsIntoInt16() -> 3
+            else -> 5
+        }
+
     override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
         when {
             value.fitsIntoSignedByte() -> bw.writeByteParam(value.toByte())
