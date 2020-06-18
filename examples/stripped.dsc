@@ -17,7 +17,7 @@
 0353: refresh_actor $PLAYER_ACTOR
 
 :MAIN_2
-016A: fade 1 1000 ms
+016A: fade 1000 1 ms
 00D6: if 0
 0256:   player $PLAYER_CHAR defined
 004D: jump_if_false @MAIN_3
