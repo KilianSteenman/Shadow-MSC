@@ -15,7 +15,6 @@ This tool is purely written for my personal needs and will never be as advanced 
 - No support for threads
 - No support for objects
 - There is no error handling at all
-- When compiling files are appended instead of overwritten
 
 Yep it's pretty useless right now!
 
@@ -48,7 +47,7 @@ Available Arguments:
 | Argument    | Description                               | Required |
 |-------------|-------------------------------------------|----------|
 | --main      | Provide path to the main script.           | Yes      |
-| -o/--output | Provide output path for the compiled script. When this argument is not provided the scm will be exported at the same path as the main script. | No       |
+| -o / --output | Provide output path for the compiled script. When this argument is not provided the scm will be exported at the same path as the main script. | No       |
 |             | List of paths to mission scripts.          | No       |
 
 Example usage:
