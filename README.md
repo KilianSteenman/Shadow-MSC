@@ -66,10 +66,14 @@ The output parameter is optional, if the output parameter is not provided the sc
 ## Examples
 In the examples directory there are a couple of simple example scripts.
 
-**Stripped**
+**[Stripped](./examples/stripped.dsc)**
 
 A script which only spawns a player.
 
-**Simple**
+**[Simple](./examples/simple.dsc)**
 
 Spawns a player, a car, a faggio and an actor. There is a missions sphere located near the actor. When the player enters the sphere, the actor will walk towards another sphere, once the actor reaches the second sphere he will start running towards the last sphere. Once this sphere has been reached, the actor will start spinning in circles.
+
+**[Mission](./examples/mission/)**
+
+Creates a start mission sphere. When the player enters the sphere a mission is started. The missions spawns 2 spheres. Entering one sphere will pass the mission, the other will fail the mission.
