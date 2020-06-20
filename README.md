@@ -13,7 +13,6 @@ This tool is purely written for my personal needs and will never be as advanced 
 
 ## Known issues
 - No support for threads
-- No support for mission scripts
 - No support for objects
 - There is no error handling at all
 - When compiling files are appended instead of overwritten
@@ -33,20 +32,32 @@ allprojects {
 }
 ```
 
-Add the dependency
+Add the dependency [![](https://jitpack.io/v/KilianSteenman/Shadow-MSC.svg)](https://jitpack.io/#KilianSteenman/Shadow-MSC)
 ```groovy
 dependencies {
-    implementation 'com.github.KilianSteenman:Shadow-MSC:0.1.0-alpha'
+    implementation 'com.github.KilianSteenman:Shadow-MSC:<LATEST VERSION>'
 }
 ```
 
-**Using the compiler stand alone executable**
+**Using the compiler as a standalone executable**
 
 Download the provided jar and execute it, providing the required arguments.
 
+Available Arguments:
+
+| Argument    | Description                               | Required |
+|-------------|-------------------------------------------|----------|
+| --main      | Provide path to the main script.           | Yes      |
+| -o/--output | Provide output path for the compiled script. When this argument is not provided the scm will be exported at the same path as the main script. | No       |
+|             | List of paths to mission scripts.          | No       |
+
 Example usage:
 ```
-java -jar shadow-msc.jar ./examples/simple.dsc ./examples/simple.scm
+java -jar shadow-msc.jar --main ./examples/simple.dsc -o ./examples/simple.scm
+```
+Including missions:
+```
+java -jar shadow-msc.jar --main ./examples/mission/main.dsc ./examples/mission/mission_1.dsc
 ```
 
 The output parameter is optional, if the output parameter is not provided the scm will be exported to the same path as the input.
