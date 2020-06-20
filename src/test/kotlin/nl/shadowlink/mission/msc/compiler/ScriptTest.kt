@@ -39,7 +39,7 @@ internal class ScriptTest {
         compiledScript.apply {
             addLine(LabelLine("INIT"))                                   // Size: 0 (total 0)
             addLine(OpcodeLine("0001"))                                 // Size: 2 (total 2)
-            addLine(OpcodeLine("0002", listOf(IntParam(0))))      // Size: 7 (total 9)
+            addLine(OpcodeLine("0002", listOf(IntParam( 32768))))      // Size: 7 (total 9)
             addLine(LabelLine("INIT_2"))                                  // Size: 0 (total 9)
             addLine(OpcodeLine("0001"))                                 // Size: 2 (total 11)
         }

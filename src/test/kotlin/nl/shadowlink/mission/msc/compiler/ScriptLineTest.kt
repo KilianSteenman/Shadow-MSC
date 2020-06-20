@@ -24,7 +24,7 @@ internal class ScriptLineTest {
             val opcodeLine = OpcodeLine(
                 opcode = "0001",
                 params = listOf(
-                    IntParam(0),
+                    IntParam( 32768),
                     FloatParam(1f)
                 )
             )
