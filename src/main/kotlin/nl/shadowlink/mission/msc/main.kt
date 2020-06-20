@@ -13,6 +13,13 @@ fun main(args: Array<String>) {
         val script = Compiler().compile(mainSrc, missionSrc)
         val destination = destination ?: main.replaceAfterLast(".", "scm")
 
+        // Make sure we have a clean file to work with
+        with(File(destination)) {
+            if (exists()) {
+                delete()
+            }
+        }
+
         println("Compiling $main to $destination")
         ScmExporter().export(FileBinaryWriter(destination), script)
         println(
