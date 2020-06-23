@@ -71,8 +71,8 @@ A script which only spawns a player.
 
 **[Simple](./examples/simple.dsc)**
 
-Spawns a player, a car, a faggio and an actor. There is a missions sphere located near the actor. When the player enters the sphere, the actor will walk towards another sphere, once the actor reaches the second sphere he will start running towards the last sphere. Once this sphere has been reached, the actor will start spinning in circles.
+Spawns a player, a car, a faggio and an actor. There is a mission sphere located near the actor. When the player enters the sphere, the actor will walk towards another sphere, once the actor reaches the second sphere he will start running towards the last sphere. Once this sphere has been reached, the actor will start spinning in circles.
 
 **[Mission](./examples/mission/)**
 
-Creates a start mission sphere. When the player enters the sphere a mission is started. The missions spawns 2 spheres. Entering one sphere will pass the mission, the other will fail the mission.
+Creates a start mission sphere. When the player enters the sphere the mission starts. The mission spawns 2 spheres. Entering one sphere will pass the mission, the other will fail the mission.

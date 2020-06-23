@@ -2,16 +2,23 @@ package nl.shadowlink.mission.msc
 
 import com.xenomachina.argparser.ArgParser
 import nl.shadowlink.mission.msc.binarywriter.FileBinaryWriter
+import nl.shadowlink.mission.msc.compiler.CompiledScript
 import nl.shadowlink.mission.msc.compiler.Compiler
 import nl.shadowlink.mission.msc.compiler.ScmExporter
 import java.io.File
 
 fun main(args: Array<String>) {
     ArgParser(args).parseInto(::CompilerArgs).run {
-        val mainSrc = File(main).readText()
-        val missionSrc = missions.map { mission -> File(mission).readText() }
-        val script = Compiler().compile(mainSrc, missionSrc)
-        val destination = destination ?: main.replaceAfterLast(".", "scm")
+        val script = when {
+            !main.isNullOrBlank() -> compileScm(main!!, missions)
+            !cleo.isNullOrBlank() -> compileCleo(cleo!!)
+            else -> throw IllegalArgumentException("Missing required main or cleo parameter")
+        }
+
+        val destination = destination
+            ?: main?.replaceAfterLast(".", "scm")
+            ?: cleo?.replaceAfterLast(".", ".cs")
+            ?: throw IllegalStateException("Unknown destination")
 
         // Make sure we have a clean file to work with
         with(File(destination)) {
@@ -31,4 +38,15 @@ fun main(args: Array<String>) {
                     "Largest mission size: ${script.largestMissionSizeInBytes} bytes\n"
         )
     }
+}
+
+fun compileScm(mainFile: String, missionFiles: List<String>): CompiledScript {
+    val mainSrc = File(mainFile).readText()
+    val missionSrc = missionFiles.map { mission -> File(mission).readText() }
+    return Compiler().compile(mainSrc, missionSrc)
+}
+
+fun compileCleo(cleoFile: String): CompiledScript {
+    val cleoSrc = File(cleoFile).readText()
+    return Compiler().compile(cleoSrc)
 }

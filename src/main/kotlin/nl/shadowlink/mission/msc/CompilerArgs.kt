@@ -7,7 +7,12 @@ class CompilerArgs(parser: ArgParser) {
     val main by parser.storing(
         "--main",
         help = "main source file"
-    )
+    ).default<String?>(null)
+
+    val cleo by parser.storing(
+        "--cleo",
+        help = "cleo source file"
+    ).default<String?>(null)
 
     val destination by parser.storing(
         "-o", "--output",
