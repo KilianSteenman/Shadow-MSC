@@ -1,13 +1,17 @@
-package nl.shadowlink.mission.msc.compiler
+package nl.shadowlink.mission.msc.compiler.scm
 
 import com.google.common.truth.Truth.assertThat
+import nl.shadowlink.mission.msc.compiler.CompiledScript
+import nl.shadowlink.mission.msc.compiler.LabelLine
+import nl.shadowlink.mission.msc.compiler.OpcodeLine
+import nl.shadowlink.mission.msc.compiler.Script
 import nl.shadowlink.mission.msc.fakes.FakeBinaryWriter
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class ScmExporterTest {
+internal class ScmWriterTest {
 
-    private val exporter = ScmExporter()
+    private val writer = ScmWriter()
 
     @Nested
     inner class HeaderTest {
@@ -32,24 +36,9 @@ internal class ScmExporterTest {
             }
 
             val bw = FakeBinaryWriter()
-            exporter.writeHeader(bw, compiledScript)
+            writer.writeHeader(bw, compiledScript)
 
             assertThat(bw.writtenBytes.size).isEqualTo(compiledScript.headerSize)
         }
-    }
-
-    @Test
-    fun `script is exported`() {
-        val script = Script().apply {
-            addLine(LabelLine("Main"))
-            addLine(OpcodeLine("0001"))
-        }
-
-        val bw = FakeBinaryWriter()
-        exporter.writeScript(bw, CompiledScript(), script)
-
-        assertThat(bw.writtenBytes).isEqualTo(
-            listOf<Byte>(0x01, 0x00)
-        )
     }
 }

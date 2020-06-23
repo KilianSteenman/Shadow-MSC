@@ -1,14 +1,19 @@
-package nl.shadowlink.mission.msc.compiler
+package nl.shadowlink.mission.msc.compiler.scm
 
 import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
+import nl.shadowlink.mission.msc.compiler.CompiledScript
+import nl.shadowlink.mission.msc.compiler.Script
+import nl.shadowlink.mission.msc.compiler.ScriptWriter
 
-class ScmExporter {
+class ScmWriter {
 
-    fun export(bw: BinaryWriter, compiledScript: CompiledScript) {
+    private val scriptWriter = ScriptWriter()
+
+    fun write(bw: BinaryWriter, compiledScript: CompiledScript) {
         writeHeader(bw, compiledScript)
 
-        compiledScript.main?.let { mainScript -> writeScript(bw, compiledScript, mainScript) }
-        compiledScript.missions.forEach { mission -> writeScript(bw, compiledScript, mission) }
+        compiledScript.main?.write(bw, compiledScript)
+        compiledScript.missions.forEach { mission -> mission.write(bw, compiledScript) }
     }
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
@@ -44,8 +49,8 @@ class ScmExporter {
         }
     }
 
-    fun writeScript(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
-        script.lines.forEach { line -> line.write(bw, compiledScript, script) }
+    private fun Script.write(bw: BinaryWriter, compiledScript: CompiledScript) {
+        scriptWriter.writeScript(bw, compiledScript, this)
     }
 
     private fun BinaryWriter.writeGoTo() {

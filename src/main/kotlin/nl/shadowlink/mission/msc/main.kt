@@ -4,7 +4,7 @@ import com.xenomachina.argparser.ArgParser
 import nl.shadowlink.mission.msc.binarywriter.FileBinaryWriter
 import nl.shadowlink.mission.msc.compiler.CompiledScript
 import nl.shadowlink.mission.msc.compiler.Compiler
-import nl.shadowlink.mission.msc.compiler.ScmExporter
+import nl.shadowlink.mission.msc.compiler.scm.ScmWriter
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
         }
 
         println("Compiling $main to $destination")
-        ScmExporter().export(FileBinaryWriter(destination), script)
+        ScmWriter().write(FileBinaryWriter(destination), script)
         println(
             "Compilation finished\n" +
                     "Globals: ${script.globals.size}\n" +
