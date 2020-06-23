@@ -46,9 +46,11 @@ Available Arguments:
 
 | Argument    | Description                               | Required |
 |-------------|-------------------------------------------|----------|
-| --main      | Provide path to the main script.           | Yes      |
+| --main      | Provide path to the main script.           | No*      |
+| --cleo      | Provide path to the cleo script.           | No*      |
 | -o / --output | Provide output path for the compiled script. When this argument is not provided the scm will be exported at the same path as the main script. | No       |
 |             | List of paths to mission scripts.          | No       |
+*At least the main or the cleo path should be provided.
 
 Example usage:
 ```
