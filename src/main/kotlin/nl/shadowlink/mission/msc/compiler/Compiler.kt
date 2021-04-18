@@ -8,9 +8,6 @@ class Compiler {
         val mainScript = scriptParser.parse(mainSource)
         val missionScripts = missionSources.map { scriptParser.parse(it) }
 
-        return CompiledScript().apply {
-            main = mainScript
-            missionScripts.forEach { mission -> addMission(mission) }
-        }
+        return CompiledScript(mainScript, missionScripts)
     }
 }

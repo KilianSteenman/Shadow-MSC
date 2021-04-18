@@ -9,6 +9,16 @@ class CompilerArgs(parser: ArgParser) {
         help = "main source file"
     )
 
+    val cleoInputSource by parser.storing(
+        "--ci",
+        help = "cleo input source"
+    )
+
+    val cleoOuputDir by parser.storing(
+        "--co",
+        help = "cleo output directory"
+    )
+
     val destination by parser.storing(
         "-o", "--output",
         help = "destination filename"

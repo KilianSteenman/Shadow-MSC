@@ -6,14 +6,7 @@ import org.junit.jupiter.api.Test
 
 internal class CompiledScriptTest {
 
-    @Test
-    fun `when a mission is added, then the mission list contains the mission`() {
-        val compiledScript = CompiledScript().apply {
-            addMission(Script())
-        }
-
-        assertThat(compiledScript.missions.size).isEqualTo(1)
-    }
+    private val emptyMain = Script()
 
     @Test
     fun `total script size is a combination of the header, the main script and all mission scripts combined`() {
@@ -29,11 +22,10 @@ internal class CompiledScriptTest {
             addLine(OpcodeLine("0001"))
         }
 
-        val compiledScript = CompiledScript().apply {
-            main = mainScript
-            addMission(missionScript1)
-            addMission(missionScript2)
-        }
+        val compiledScript = CompiledScript(
+            mainScript = mainScript,
+            missionScripts = listOf(missionScript1, missionScript2)
+        )
 
         val expectedSize = compiledScript.headerSize +
                 compiledScript.mainSizeInBytes +
@@ -47,11 +39,6 @@ internal class CompiledScriptTest {
     inner class MainScriptSizeTest {
 
         @Test
-        fun `when main script is null, then main script size is 0`() {
-            assertThat(CompiledScript().mainSizeInBytes).isEqualTo(0)
-        }
-
-        @Test
         fun `main size is the size of the main script`() {
             val mainScript = Script().apply {
                 addLine(OpcodeLine("0001", params = listOf(IntParam(0))))
@@ -60,9 +47,7 @@ internal class CompiledScriptTest {
             // Make sure we are not testing with a 0 byte script
             assertThat(mainScript.scriptSizeInBytes).isGreaterThan(0)
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-            }
+            val compiledScript = CompiledScript(mainScript = mainScript)
 
             assertThat(compiledScript.mainSizeInBytes).isEqualTo(mainScript.scriptSizeInBytes)
         }
@@ -73,7 +58,7 @@ internal class CompiledScriptTest {
 
         @Test
         fun `when there are no missions, then largest missions size is 0`() {
-            assertThat(CompiledScript().largestMissionSizeInBytes).isEqualTo(0)
+            assertThat(CompiledScript(emptyMain).largestMissionSizeInBytes).isEqualTo(0)
         }
 
         @Test
@@ -87,10 +72,10 @@ internal class CompiledScriptTest {
                 addLine(OpcodeLine("0002", params = listOf(IntParam(0))))
             }
 
-            val compiledScript = CompiledScript().apply {
-                addMission(smallMission)
-                addMission(largeMission)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = emptyMain,
+                missionScripts = listOf(smallMission, largeMission)
+            )
 
             assertThat(compiledScript.largestMissionSizeInBytes).isEqualTo(largeMission.scriptSizeInBytes)
         }
@@ -106,9 +91,7 @@ internal class CompiledScriptTest {
                 addObject("object2")
             }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-            }
+            val compiledScript = CompiledScript(mainScript)
 
             assertThat(compiledScript.objects).isEqualTo(listOf("object1", "object2"))
         }
@@ -120,9 +103,7 @@ internal class CompiledScriptTest {
                 addObject("object2")
             }
 
-            val compiledScript = CompiledScript().apply {
-                addMission(missionScript)
-            }
+            val compiledScript = CompiledScript(emptyMain, listOf(missionScript))
 
             assertThat(compiledScript.objects).isEqualTo(listOf("object1", "object2"))
         }
@@ -143,11 +124,10 @@ internal class CompiledScriptTest {
                 addObject("object2")
             }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-                addMission(missionScript1)
-                addMission(missionScript2)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = mainScript,
+                missionScripts = listOf(missionScript1, missionScript2)
+            )
 
             assertThat(compiledScript.objects).isEqualTo(listOf("object1", "object2", "object3"))
         }
@@ -163,9 +143,7 @@ internal class CompiledScriptTest {
                 addGlobal("PLAYER_ACTOR")
             }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-            }
+            val compiledScript = CompiledScript(mainScript)
 
             assertThat(compiledScript.globals).isEqualTo(listOf("PLAYER_CHAR", "PLAYER_ACTOR"))
         }
@@ -177,9 +155,7 @@ internal class CompiledScriptTest {
                 addGlobal("PLAYER_ACTOR")
             }
 
-            val compiledScript = CompiledScript().apply {
-                addMission(missionScript)
-            }
+            val compiledScript = CompiledScript(mainScript = emptyMain, missionScripts = listOf(missionScript))
 
             assertThat(compiledScript.globals).isEqualTo(listOf("PLAYER_CHAR", "PLAYER_ACTOR"))
         }
@@ -204,11 +180,10 @@ internal class CompiledScriptTest {
                 addGlobal("VEHICLE")
             }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-                addMission(missionScript1)
-                addMission(missionScript2)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = mainScript,
+                missionScripts = listOf(missionScript1, missionScript2)
+            )
 
             assertThat(compiledScript.globals).isEqualTo(
                 listOf(
@@ -232,9 +207,7 @@ internal class CompiledScriptTest {
                 addObject("object2")
             }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-            }
+            val compiledScript = CompiledScript(mainScript)
 
             // Header Size = 64 (default header size) + 48 (object size) = 112
             assertThat(compiledScript.headerSize).isEqualTo(112)
@@ -248,9 +221,7 @@ internal class CompiledScriptTest {
                 addGlobal("PLAYER_ACTOR")
             }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-            }
+            val compiledScript = CompiledScript(mainScript)
 
             // Header Size = 64 (default header size) + 8 (globals) = 72
             assertThat(compiledScript.headerSize).isEqualTo(72)
@@ -261,10 +232,10 @@ internal class CompiledScriptTest {
             val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
             val missionScript = Script().apply { addLine(OpcodeLine("0001")) }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-                addMission(missionScript)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = mainScript,
+                missionScripts = listOf(missionScript)
+            )
 
             // Header Size = 64 (default header size) + 4 (1 mission) = 68
             assertThat(compiledScript.headerSize).isEqualTo(68)
@@ -279,10 +250,10 @@ internal class CompiledScriptTest {
             val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
             val mission = Script().apply { addLine(OpcodeLine("0001")) }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-                addMission(mission)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = mainScript,
+                listOf(mission)
+            )
 
             val expectedOffset = compiledScript.headerSize + mainScript.scriptSizeInBytes
             assertThat(compiledScript.getOffsetForMission(0)).isEqualTo(expectedOffset)
@@ -294,11 +265,10 @@ internal class CompiledScriptTest {
             val mission1 = Script().apply { addLine(OpcodeLine("0001")) }
             val mission2 = Script().apply { addLine(OpcodeLine("0001")) }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-                addMission(mission1)
-                addMission(mission2)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = mainScript,
+                missionScripts = listOf(mission1, mission2)
+            )
 
             val expectedOffset = compiledScript.headerSize + mainScript.scriptSizeInBytes + mission1.scriptSizeInBytes
             assertThat(compiledScript.getOffsetForMission(1)).isEqualTo(expectedOffset)
@@ -312,22 +282,21 @@ internal class CompiledScriptTest {
         fun `setting a script as main script will mark it as main`() {
             val mainScript = Script().apply { addLine(OpcodeLine("0001")) }
 
-            val compiledScript = CompiledScript().apply {
-                main = mainScript
-            }
+            val compiledScript = CompiledScript(mainScript)
 
-            assertThat(compiledScript.main?.isMainScript).isTrue()
+            assertThat(compiledScript.mainScript.isMainScript).isTrue()
         }
 
         @Test
         fun `adding a script as mission, will not mark it as main`() {
             val missionScript = Script().apply { addLine(OpcodeLine("0001")) }
 
-            val compiledScript = CompiledScript().apply {
-                addMission(missionScript)
-            }
+            val compiledScript = CompiledScript(
+                mainScript = emptyMain,
+                missionScripts = listOf(missionScript)
+            )
 
-            assertThat(compiledScript.missions.first().isMainScript).isFalse()
+            assertThat(compiledScript.missionScripts.first().isMainScript).isFalse()
         }
     }
 }

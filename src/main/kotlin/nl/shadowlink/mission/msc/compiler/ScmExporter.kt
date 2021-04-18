@@ -7,8 +7,8 @@ class ScmExporter {
     fun export(bw: BinaryWriter, compiledScript: CompiledScript) {
         writeHeader(bw, compiledScript)
 
-        compiledScript.main?.let { mainScript -> writeScript(bw, compiledScript, mainScript) }
-        compiledScript.missions.forEach { mission -> writeScript(bw, compiledScript, mission) }
+        writeScript(bw, compiledScript, compiledScript.mainScript)
+        compiledScript.missionScripts.forEach { mission -> writeScript(bw, compiledScript, mission) }
     }
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
@@ -31,16 +31,16 @@ class ScmExporter {
             script.objects.forEach { name -> writeNullTerminatedString(name, 24) }
         }
 
-        val fourthSegmentOffset = thirdSegmentOffset + 20 + script.missions.size * 4
+        val fourthSegmentOffset = thirdSegmentOffset + 20 + script.missionScripts.size * 4
         with(bw) {
             writeGoTo()
             writeInt32(fourthSegmentOffset)
             writeByte(0) // Alignment
             writeInt32(script.mainSizeInBytes) // Main script size
             writeInt32(script.largestMissionSizeInBytes)
-            writeInt16(script.missions.count().toShort())
+            writeInt16(script.missionScripts.count().toShort())
             writeInt16(0) // Number of exclusive mission scripts(possibly 1 in III, 2 in VC)
-            script.missions.forEachIndexed { index, _ -> writeInt32(script.getOffsetForMission(index)) }
+            script.missionScripts.forEachIndexed { index, _ -> writeInt32(script.getOffsetForMission(index)) }
         }
     }
 

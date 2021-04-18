@@ -1,9 +1,12 @@
 package nl.shadowlink.mission.msc.compiler
 
-class CompiledScript {
+class CompiledScript(
+    val mainScript: Script,
+    val missionScripts: List<Script> = emptyList()
+) {
 
     val totalSize: Int
-        get() = headerSize + mainSizeInBytes + _missions.sumBy { it.scriptSizeInBytes }
+        get() = headerSize + mainSizeInBytes + missionScripts.sumBy { it.scriptSizeInBytes }
 
     private val _globals = mutableListOf<String>()
     val globals: List<String> = _globals
@@ -11,32 +14,25 @@ class CompiledScript {
     private val _objects = mutableListOf<String>()
     val objects: List<String> = _objects
 
-    var main: Script? = null
-        set(mainScript) {
-            field = mainScript
-            mainScript?.let {
-                addObjectsFromScript(it)
-                addGlobalsFromScript(it)
-                it.isMainScript = true
-            }
-        }
-
-    private val _missions = mutableListOf<Script>()
-    val missions: List<Script> = _missions
-
     val headerSize: Int
-        get() = 64 + (objects.size * 24) + (globals.size * 4) + (missions.size * 4)
+        get() = 64 + (objects.size * 24) + (globals.size * 4) + (missionScripts.size * 4)
 
     val mainSizeInBytes: Int
-        get() = main?.scriptSizeInBytes ?: 0
+        get() = mainScript.scriptSizeInBytes
 
     val largestMissionSizeInBytes: Int
-        get() = missions.sortedWith(compareBy(Script::scriptSizeInBytes)).lastOrNull()?.scriptSizeInBytes ?: 0
+        get() = missionScripts.sortedWith(compareBy(Script::scriptSizeInBytes)).lastOrNull()?.scriptSizeInBytes ?: 0
 
-    fun addMission(mission: Script) {
-        _missions.add(mission)
-        addObjectsFromScript(mission)
-        addGlobalsFromScript(mission)
+    init {
+        mainScript.isMainScript = true
+        addObjectsAndGlobals(mainScript)
+
+        missionScripts.forEach { missionScript -> addObjectsAndGlobals(missionScript) }
+    }
+
+    private fun addObjectsAndGlobals(script: Script) {
+        addObjectsFromScript(script)
+        addGlobalsFromScript(script)
     }
 
     private fun addObjectsFromScript(script: Script) {
@@ -56,6 +52,6 @@ class CompiledScript {
     }
 
     fun getOffsetForMission(index: Int): Int {
-        return headerSize + mainSizeInBytes + missions.subList(0, index).sumBy { it.scriptSizeInBytes }
+        return headerSize + mainSizeInBytes + missionScripts.subList(0, index).sumBy { it.scriptSizeInBytes }
     }
 }

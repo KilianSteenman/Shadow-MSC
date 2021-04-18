@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
         println(
             "Compilation finished\n" +
                     "Globals: ${script.globals.size}\n" +
-                    "Missions: ${script.missions.size}\n" +
+                    "Missions: ${script.missionScripts.size}\n" +
                     "Total script size: ${script.totalSize} bytes\n" +
                     "Main size: ${script.mainSizeInBytes} bytes\n" +
                     "Largest mission size: ${script.largestMissionSizeInBytes} bytes\n"
