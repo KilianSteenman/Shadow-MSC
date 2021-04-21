@@ -7,8 +7,8 @@ class ScmExporter {
     fun export(bw: BinaryWriter, compiledScript: CompiledScript) {
         writeHeader(bw, compiledScript)
 
-        writeScript(bw, compiledScript, compiledScript.mainScript)
-        compiledScript.missionScripts.forEach { mission -> writeScript(bw, compiledScript, mission) }
+        compiledScript.mainScript.export(bw, compiledScript)
+        compiledScript.missionScripts.forEach { mission -> mission.export(bw, compiledScript) }
     }
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
@@ -44,13 +44,13 @@ class ScmExporter {
         }
     }
 
-    fun writeScript(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
-        script.lines.forEach { line -> line.write(bw, compiledScript, script) }
-    }
-
     private fun BinaryWriter.writeGoTo() {
         writeByte(0x02)
         writeByte(0x0)
         writeByte(0x01)
     }
+}
+
+fun Script.export(bw: BinaryWriter, compiledScript: CompiledScript) {
+    lines.forEach { line -> line.write(bw, compiledScript, this) }
 }
