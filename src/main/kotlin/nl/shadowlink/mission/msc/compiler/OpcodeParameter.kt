@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 sealed class OpcodeParameter(
     open val sizeInBytes: Int
 ) {
-    abstract fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script)
+    abstract fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script)
 }
 
 data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 0) {
@@ -18,7 +18,7 @@ data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 0) {
             else -> 5
         }
 
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         when {
             value.fitsIntoSignedByte() -> bw.writeByteParam(value.toByte())
             value.fitsIntoInt16() -> bw.writeInt16Param(value.toShort())
@@ -51,7 +51,7 @@ data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 0) {
 }
 
 data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 5) {
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         bw.writeByte(0x06) // Type
         with(ByteBuffer.allocate(4).putFloat(value).array()) {
             bw.writeByte(get(3))
@@ -63,7 +63,7 @@ data class FloatParam(val value: Float) : OpcodeParameter(sizeInBytes = 5) {
 }
 
 data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         value.forEach { bw.writeChar(it) }
         bw.writeByte(0) // Zero termination
         repeat((value.length + 1 until 8).count()) { bw.writeByte(0xCC.toByte()) }
@@ -71,28 +71,28 @@ data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
 }
 
 data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 5) {
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         bw.writeByte(0x1) // Type
-        bw.writeInt32(script.getAddressForLabel(label, compiledScript.headerSize))
+        bw.writeInt32(script.getAddressForLabel(label, labelOffsetProvider.labelOffset))
     }
 }
 
 data class GlobalVar(val name: String) : OpcodeParameter(sizeInBytes = 3) {
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         bw.writeByte(0x2) // Type
         bw.writeInt16(script.getAddressForGlobal(name))
     }
 }
 
 data class LocalVar(val index: Int) : OpcodeParameter(sizeInBytes = 3) {
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         bw.writeByte(0x3)
         bw.writeInt16((index * 2).toShort())
     }
 }
 
 data class ModelParam(val name: String) : OpcodeParameter(sizeInBytes = 5) {
-    override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
         bw.writeByte(0x1)
         bw.writeInt32(script.getIdForModel(name))
     }

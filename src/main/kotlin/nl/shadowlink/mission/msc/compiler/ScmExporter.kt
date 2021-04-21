@@ -51,6 +51,6 @@ class ScmExporter {
     }
 }
 
-fun Script.export(bw: BinaryWriter, compiledScript: CompiledScript) {
-    lines.forEach { line -> line.write(bw, compiledScript, this) }
+fun Script.export(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider) {
+    lines.forEach { line -> line.write(bw, labelOffsetProvider, this) }
 }

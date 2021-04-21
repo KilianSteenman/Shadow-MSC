@@ -3,7 +3,7 @@ package nl.shadowlink.mission.msc.compiler
 class CompiledScript(
     val mainScript: Script,
     val missionScripts: List<Script> = emptyList()
-) {
+) : LabelOffsetProvider {
 
     val totalSize: Int
         get() = headerSize + mainSizeInBytes + missionScripts.sumBy { it.scriptSizeInBytes }
@@ -54,4 +54,7 @@ class CompiledScript(
     fun getOffsetForMission(index: Int): Int {
         return headerSize + mainSizeInBytes + missionScripts.subList(0, index).sumBy { it.scriptSizeInBytes }
     }
+
+    override val labelOffset: Int
+        get() = headerSize
 }

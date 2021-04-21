@@ -2,8 +2,11 @@ package nl.shadowlink.mission.msc
 
 import com.xenomachina.argparser.ArgParser
 import nl.shadowlink.mission.msc.binarywriter.FileBinaryWriter
-import nl.shadowlink.mission.msc.compiler.*
+import nl.shadowlink.mission.msc.cleo.CleoLabelOffsetProvider
+import nl.shadowlink.mission.msc.compiler.Compiler
+import nl.shadowlink.mission.msc.compiler.ScmExporter
 import nl.shadowlink.mission.msc.compiler.ScriptParser
+import nl.shadowlink.mission.msc.compiler.export
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -43,11 +46,11 @@ fun startCompilation(args: CompilerArgs) {
 
         val cleoInputSourcePath = cleoInputSource
         if(cleoInputSourcePath != null) {
-            val cleoDestination = cleoOuputPath ?: cleoInputSourcePath.replaceAfterLast(".", "sc")
+            val cleoDestination = cleoOutputPath ?: cleoInputSourcePath.replaceAfterLast(".", "sc")
 
             println("Compiling cleo $cleoInputSourcePath to $cleoDestination")
             val script = ScriptParser().parse(File(cleoInputSourcePath).readText())
-            script.export(FileBinaryWriter(cleoDestination), CompiledScript(Script()))
+            script.export(FileBinaryWriter(cleoDestination), CleoLabelOffsetProvider)
             println("Cleo compilation finished")
         }
     }

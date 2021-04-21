@@ -12,7 +12,7 @@ interface CompilerArgs {
 
     val cleoInputSource: String?
 
-    val cleoOuputPath: String?
+    val cleoOutputPath: String?
 }
 
 class DefaultCompilerArgs(parser: ArgParser): CompilerArgs {
@@ -36,7 +36,7 @@ class DefaultCompilerArgs(parser: ArgParser): CompilerArgs {
         help = "cleo input source"
     )
 
-    override val cleoOuputPath by parser.storing(
+    override val cleoOutputPath by parser.storing(
         "--co",
         help = "cleo output directory"
     )

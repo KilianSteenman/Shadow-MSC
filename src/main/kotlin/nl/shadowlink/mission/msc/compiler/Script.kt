@@ -26,11 +26,8 @@ class Script {
         lines.add(line)
 
         if (line is OpcodeLine) {
-            line.params.forEach { param ->
-                if (param is GlobalVar) {
-                    addGlobal(param.name)
-                }
-            }
+            line.params.filterIsInstance<GlobalVar>()
+                .forEach { param -> addGlobal(param.name) }
         }
 
         calculateLabelAddress(line)
