@@ -16,20 +16,20 @@ internal class ScriptTest {
                 addLine(LabelLine("INIT"))
             }
 
-            assertThat(compiledScript.getAddressForLabel("INIT")).isEqualTo(0)
+            assertThat(compiledScript.getAddressForLabel("INIT", 0)).isEqualTo(0)
         }
 
         @Test
         fun `multiple label addresses are mapped`() {
-            val compiledScript = Script()
-            compiledScript.apply {
+            val compiledScript = Script().apply {
                 addLine(LabelLine("INIT"))
                 addLine(OpcodeLine("0001"))
                 addLine(LabelLine("MAIN"))
+                isMainScript = true
             }
 
-            assertThat(compiledScript.getAddressForLabel("INIT")).isEqualTo(0)
-            assertThat(compiledScript.getAddressForLabel("MAIN")).isEqualTo(2)
+            assertThat(compiledScript.getAddressForLabel("INIT", 0)).isEqualTo(0)
+            assertThat(compiledScript.getAddressForLabel("MAIN", 0)).isEqualTo(2)
         }
     }
 

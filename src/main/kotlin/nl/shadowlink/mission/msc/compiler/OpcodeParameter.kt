@@ -73,13 +73,7 @@ data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
 data class LabelParam(val label: String) : OpcodeParameter(sizeInBytes = 5) {
     override fun write(bw: BinaryWriter, compiledScript: CompiledScript, script: Script) {
         bw.writeByte(0x1) // Type
-
-        val address = if (script.isMainScript) {
-            compiledScript.headerSize + script.getAddressForLabel(label)
-        } else {
-            script.getAddressForLabel(label) * -1
-        }
-        bw.writeInt32(address)
+        bw.writeInt32(script.getAddressForLabel(label, compiledScript.headerSize))
     }
 }
 

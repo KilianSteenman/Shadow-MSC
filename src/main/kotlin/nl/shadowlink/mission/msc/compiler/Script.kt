@@ -36,7 +36,15 @@ class Script {
         calculateLabelAddress(line)
     }
 
-    fun getAddressForLabel(label: String): Int {
+    fun getAddressForLabel(label: String, headerSize: Int): Int {
+        return if (isMainScript) {
+            headerSize + getAddressForLabelNonNull(label)
+        } else {
+            getAddressForLabelNonNull(label) * -1
+        }
+    }
+
+    private fun getAddressForLabelNonNull(label: String): Int {
         return labelAddressMapping[label] ?: throw IllegalStateException("Unable to find address for label [$label]")
     }
 
