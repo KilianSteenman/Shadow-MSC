@@ -46,7 +46,7 @@ fun startCompilation(args: CompilerArgs) {
 
         val cleoInputSourcePath = cleoInputSource
         if(cleoInputSourcePath != null) {
-            val cleoDestination = cleoOutputPath ?: cleoInputSourcePath.replaceAfterLast(".", "sc")
+            val cleoDestination = cleoOutputPath ?: cleoInputSourcePath.replaceAfterLast(".", "cs")
 
             println("Compiling cleo $cleoInputSourcePath to $cleoDestination")
             val script = ScriptParser().parse(File(cleoInputSourcePath).readText())

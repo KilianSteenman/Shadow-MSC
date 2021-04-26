@@ -19,7 +19,7 @@ class DefaultCompilerArgs(parser: ArgParser): CompilerArgs {
     override val main by parser.storing(
         "--main",
         help = "main source file"
-    )
+    ).default<String?>(null)
 
     override val destination by parser.storing(
         "-o", "--output",
@@ -32,12 +32,12 @@ class DefaultCompilerArgs(parser: ArgParser): CompilerArgs {
     ).default { emptyList() }
 
     override val cleoInputSource by parser.storing(
-        "--ci",
+        "--cleo-input",
         help = "cleo input source"
-    )
+    ).default<String?>(null)
 
     override val cleoOutputPath by parser.storing(
-        "--co",
+        "--cleo-output",
         help = "cleo output directory"
-    )
+    ).default<String?>(null)
 }
