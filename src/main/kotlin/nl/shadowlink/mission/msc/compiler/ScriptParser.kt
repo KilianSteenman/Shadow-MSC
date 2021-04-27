@@ -31,6 +31,7 @@ internal class ScriptParser {
             val matcher = paramMatchers.firstOrNull { matcher ->
                 matcher.matches(valueLine, tokenizerIndex, paramMatcherResult)
             }
+            
             if (matcher != null) {
                 paramList.add(matcher.toParam(paramMatcherResult))
                 tokenizerIndex = paramMatcherResult.lastIndex

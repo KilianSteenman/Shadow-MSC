@@ -1,6 +1,8 @@
-package nl.shadowlink.mission.msc.compiler
+package nl.shadowlink.mission.msc.scm
 
 import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
+import nl.shadowlink.mission.msc.compiler.LabelOffsetProvider
+import nl.shadowlink.mission.msc.compiler.Script
 
 class ScmExporter {
 
@@ -13,7 +15,7 @@ class ScmExporter {
 
     fun writeHeader(bw: BinaryWriter, script: CompiledScript) {
         println("Writing header (${script.headerSize} bytes)")
-        val secondSegmentOffset = 8 + script.globals.size * 4
+        val secondSegmentOffset = GLOBALS_SEGMENT_SIZE + script.globals.size * 4
         with(bw) {
             writeGoTo()
             writeInt32(secondSegmentOffset)
@@ -21,7 +23,7 @@ class ScmExporter {
             repeat(script.globals.size) { writeInt32(0) }
         }
 
-        val thirdSegmentOffset = secondSegmentOffset + 36 + script.objects.size * 24
+        val thirdSegmentOffset = secondSegmentOffset + OBJECTS_SEGMENT_SIZE + script.objects.size * 24
         with(bw) {
             writeGoTo()
             writeInt32(thirdSegmentOffset)
@@ -31,7 +33,7 @@ class ScmExporter {
             script.objects.forEach { name -> writeNullTerminatedString(name, 24) }
         }
 
-        val fourthSegmentOffset = thirdSegmentOffset + 20 + script.missionScripts.size * 4
+        val fourthSegmentOffset = thirdSegmentOffset + MISSIONS_SEGMENT_SIZE + script.missionScripts.size * 4
         with(bw) {
             writeGoTo()
             writeInt32(fourthSegmentOffset)
@@ -48,6 +50,12 @@ class ScmExporter {
         writeByte(0x02)
         writeByte(0x0)
         writeByte(0x01)
+    }
+
+    companion object {
+        private const val GLOBALS_SEGMENT_SIZE = 8
+        private const val OBJECTS_SEGMENT_SIZE = 36
+        private const val MISSIONS_SEGMENT_SIZE = 20
     }
 }
 

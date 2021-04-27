@@ -4,9 +4,9 @@ import com.xenomachina.argparser.ArgParser
 import nl.shadowlink.mission.msc.binarywriter.FileBinaryWriter
 import nl.shadowlink.mission.msc.cleo.CleoLabelOffsetProvider
 import nl.shadowlink.mission.msc.compiler.Compiler
-import nl.shadowlink.mission.msc.compiler.ScmExporter
 import nl.shadowlink.mission.msc.compiler.ScriptParser
-import nl.shadowlink.mission.msc.compiler.export
+import nl.shadowlink.mission.msc.scm.ScmExporter
+import nl.shadowlink.mission.msc.scm.export
 import java.io.File
 
 fun main(args: Array<String>) {

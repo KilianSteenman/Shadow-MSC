@@ -1,4 +1,7 @@
-package nl.shadowlink.mission.msc.compiler
+package nl.shadowlink.mission.msc.scm
+
+import nl.shadowlink.mission.msc.compiler.LabelOffsetProvider
+import nl.shadowlink.mission.msc.compiler.Script
 
 class CompiledScript(
     val mainScript: Script,

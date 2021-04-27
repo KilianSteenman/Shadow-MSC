@@ -1,5 +1,7 @@
 package nl.shadowlink.mission.msc.compiler
 
+import nl.shadowlink.mission.msc.scm.CompiledScript
+
 class Compiler {
 
     private val scriptParser = ScriptParser()

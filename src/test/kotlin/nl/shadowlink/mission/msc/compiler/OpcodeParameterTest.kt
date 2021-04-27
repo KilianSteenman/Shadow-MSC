@@ -2,6 +2,7 @@ package nl.shadowlink.mission.msc.compiler
 
 import com.google.common.truth.Truth.assertThat
 import nl.shadowlink.mission.msc.fakes.FakeBinaryWriter
+import nl.shadowlink.mission.msc.scm.CompiledScript
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
