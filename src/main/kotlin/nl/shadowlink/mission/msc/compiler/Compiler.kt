@@ -12,7 +12,7 @@ class Compiler {
 
     private val scriptParser = ScriptParser()
 
-    fun compile(args: CompilerArgs) {
+    fun compile(args: CompilerArgs): CompilationState {
         // TODO: write tests for this
         with(args) {
             val mainPath = main
@@ -31,13 +31,12 @@ class Compiler {
 
                 println("Compiling $mainPath to $destination")
                 ScmExporter().export(FileBinaryWriter(destination), compiledScript)
-                println(
-                    "Compilation finished\n" +
-                            "Globals: ${compiledScript.globals.size}\n" +
-                            "Missions: ${compiledScript.missionScripts.size}\n" +
-                            "Total script size: ${compiledScript.totalSize} bytes\n" +
-                            "Main size: ${compiledScript.mainSizeInBytes} bytes\n" +
-                            "Largest mission size: ${compiledScript.largestMissionSizeInBytes} bytes\n"
+                return CompilationState.ScmCompilationSuccess(
+                    globalCount = compiledScript.globals.size,
+                    missionCount = compiledScript.missionScripts.size,
+                    mainSize = compiledScript.mainSizeInBytes,
+                    largestMissionSize = compiledScript.largestMissionSizeInBytes,
+                    totalScriptSize = compiledScript.totalSize
                 )
             }
 
@@ -55,8 +54,10 @@ class Compiler {
                 println("Compiling cleo $cleoInputSourcePath to $cleoDestination")
                 val script = ScriptParser().parse(File(cleoInputSourcePath).readText())
                 script.export(FileBinaryWriter(cleoDestination), CleoLabelOffsetProvider)
-                println("Cleo compilation finished")
+                return CompilationState.CleoCompilationSuccess(scriptSize = script.scriptSizeInBytes)
             }
+
+            return CompilationState.CompilationFailed(error = "Invalid arguments")
         }
     }
 
