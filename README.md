@@ -42,27 +42,39 @@ dependencies {
 
 Download the provided jar and execute it, providing the required arguments.
 
-Available Arguments:
+**Available Arguments:**
 
 | Argument    | Description                               | Required |
 |-------------|-------------------------------------------|----------|
-| --main      | Provide path to the main script.           | Yes      |
+| --main      | Provide path to the main script.           | No      |
 | -o / --output | Provide output path for the compiled script. When this argument is not provided the scm will be exported at the same path as the main script. | No       |
+| --cleo-input | Path to cleo script         | No       |
+| --cleo-output | Optional path of cleo output, when this value is not provided the script will be exported at the input path | No       |
 |             | List of paths to mission scripts.          | No       |
 
-Example usage:
+**Example usage:**
+
 ```
 java -jar shadow-msc.jar --main ./examples/simple.dsc -o ./examples/simple.scm
 ```
-Including missions:
+
+The output parameter is optional, if the output parameter is not provided the scm will be exported to the same path as
+the input.
+
+**Including missions:**
+
 ```
 java -jar shadow-msc.jar --main ./examples/mission/main.dsc ./examples/mission/mission_1.dsc
 ```
 
-The output parameter is optional, if the output parameter is not provided the scm will be exported to the same path as the input.
+**Cleo example:**
 
+```
+java -jar shadow-msc.jar --cleo-input ./examples/cleo.dsc --cleo-output ./examples/cleo.cs
+```
 
 ## Examples
+
 In the examples directory there are a couple of simple example scripts.
 
 **[Stripped](./examples/stripped.dsc)**
