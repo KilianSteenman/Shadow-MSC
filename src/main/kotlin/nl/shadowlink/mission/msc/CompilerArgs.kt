@@ -15,7 +15,7 @@ interface CompilerArgs {
     val cleoOutputPath: String?
 }
 
-class DefaultCompilerArgs(parser: ArgParser): CompilerArgs {
+internal class DefaultCompilerArgs(parser: ArgParser) : CompilerArgs {
     override val main by parser.storing(
         "--main",
         help = "main source file"
