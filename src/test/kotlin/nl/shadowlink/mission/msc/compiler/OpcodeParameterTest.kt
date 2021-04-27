@@ -328,4 +328,34 @@ internal class OpcodeParameterTest {
             assertThat(bw.writtenBytes.first()).isEqualTo(0x01.toByte())
         }
     }
+
+    @Nested
+    inner class CleoStringParamTest {
+
+        @Test
+        fun `cleo string parameter takes string length bytes plus type byte`() {
+            assertThat(CleoStringParam("Hello World!").sizeInBytes).isEqualTo(13)
+        }
+
+        @Test
+        fun `param type is written`() {
+            val bw = FakeBinaryWriter()
+
+            CleoStringParam("Hello World!").write(bw, CompiledScript(emptyMainScript), Script())
+
+            assertThat(bw.writtenBytes.first()).isEqualTo(0x0e.toByte())
+        }
+
+        @Test
+        fun `param is written`() {
+            val bw = FakeBinaryWriter()
+
+            CleoStringParam("Hello World!").write(bw, CompiledScript(emptyMainScript), Script())
+
+            val expectedOutput = byteArrayOf(
+                0x0e, 0x0c, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21
+            )
+            assertThat(bw.writtenBytes.toByteArray()).isEqualTo(expectedOutput)
+        }
+    }
 }

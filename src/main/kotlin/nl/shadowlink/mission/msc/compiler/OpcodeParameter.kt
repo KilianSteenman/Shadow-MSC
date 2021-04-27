@@ -4,12 +4,12 @@ import nl.shadowlink.mission.msc.binarywriter.BinaryWriter
 import java.nio.ByteBuffer
 
 sealed class OpcodeParameter(
-    open val sizeInBytes: Int
+    open val sizeInBytes: Int = 0
 ) {
     abstract fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script)
 }
 
-data class IntParam(val value: Int) : OpcodeParameter(sizeInBytes = 0) {
+data class IntParam(val value: Int) : OpcodeParameter() {
 
     override val sizeInBytes: Int
         get() = when {
@@ -67,6 +67,26 @@ data class StringParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
         value.forEach { bw.writeChar(it) }
         bw.writeByte(0) // Zero termination
         repeat((value.length + 1 until 8).count()) { bw.writeByte(0xCC.toByte()) }
+    }
+}
+
+data class GxtParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
+        value.forEach { bw.writeChar(it) }
+        bw.writeByte(0) // Zero termination
+        repeat((value.length + 1 until 8).count()) { bw.writeByte(0xCC.toByte()) }
+    }
+}
+
+data class CleoStringParam(val value: String) : OpcodeParameter(sizeInBytes = 8) {
+    override val sizeInBytes: Int
+        get() = value.length + 1
+
+    override fun write(bw: BinaryWriter, labelOffsetProvider: LabelOffsetProvider, script: Script) {
+        bw.writeByte(0x0e) // Type
+        bw.writeByte(value.length.toByte()) // Type
+
+        value.forEach { bw.writeChar(it) }
     }
 }
 

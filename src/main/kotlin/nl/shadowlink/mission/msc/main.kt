@@ -48,6 +48,13 @@ fun startCompilation(args: CompilerArgs) {
         if(cleoInputSourcePath != null) {
             val cleoDestination = cleoOutputPath ?: cleoInputSourcePath.replaceAfterLast(".", "cs")
 
+            // Make sure we have a clean file to work with
+            with(File(cleoDestination)) {
+                if (exists()) {
+                    delete()
+                }
+            }
+
             println("Compiling cleo $cleoInputSourcePath to $cleoDestination")
             val script = ScriptParser().parse(File(cleoInputSourcePath).readText())
             script.export(FileBinaryWriter(cleoDestination), CleoLabelOffsetProvider)

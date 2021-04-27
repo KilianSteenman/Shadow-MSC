@@ -74,11 +74,19 @@ internal class ScriptParserTest {
             }
 
             @Test
-            fun `gxt entry parameter is parsed as string parameter`() {
+            fun `gxt entry parameter is parsed as gxt parameter`() {
                 val compiledScript = parser.parse("01E3: text_1number_styled \"M_PASS\"  200  5000 ms  1")
 
                 assertThat((compiledScript.lines.first() as OpcodeLine).params)
-                    .contains(StringParam("M_PASS"))
+                    .contains(GxtParam("M_PASS"))
+            }
+
+            @Test
+            fun `cleo string parameter is parsed as cleo string parameter`() {
+                val compiledScript = parser.parse("0ACD: show_text_highpriority \"Hello World!\" time 5000")
+
+                assertThat((compiledScript.lines.first() as OpcodeLine).params)
+                    .contains(CleoStringParam("Hello World!"))
             }
 
             @Test
